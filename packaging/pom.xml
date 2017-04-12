@@ -8,7 +8,7 @@
   </parent>
   <artifactId>data-injectors-packaging</artifactId>
   <packaging>pom</packaging>
-  <name>eXo Injector - Packaging</name>
+  <name>Data Injectors - Packaging</name>
   <dependencies>
     <dependency>
       <groupId>org.exoplatform.addons.injectors</groupId>

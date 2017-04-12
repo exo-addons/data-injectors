@@ -4,19 +4,19 @@
   <parent>
     <artifactId>addons-parent-pom</artifactId>
     <groupId>org.exoplatform.addons</groupId>
-    <version>7-M01</version>
+    <version>8-SNAPSHOT</version>
   </parent>
   <groupId>org.exoplatform.addons.injectors</groupId>
   <artifactId>data-injectors-configuration</artifactId>
   <version>1.0.x-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>eXo Injector - Addon</name>
+  <name>Data Injectors - Addon</name>
   <modules>
     <module>services</module>
     <module>packaging</module>
   </modules>
   <properties>
-    <org.exoplatform.platform.version>4.4.x-SNAPSHOT</org.exoplatform.platform.version>
+    <org.exoplatform.platform.version>5.0.x-SNAPSHOT</org.exoplatform.platform.version>
   </properties>
   <dependencyManagement>
     <dependencies>

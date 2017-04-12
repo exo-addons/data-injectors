@@ -12,7 +12,7 @@
         <component-plugin>
             <name>PersonnalTaskInjector</name>
             <set-method>addInjector</set-method>
-            <type>org.exoplatform.injector.services.TaskInjector</type>
+            <type>org.exoplatform.injector.services.task.TaskInjector</type>
             <description>inject data to Task for performance test</description>
         </component-plugin>
     </external-component-plugins>

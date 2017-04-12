@@ -8,7 +8,7 @@
   </parent>
   <artifactId>data-injectors-services</artifactId>
   <packaging>jar</packaging>
-  <name>eXo Injector - Services</name>
+  <name>Data Injectors - Services</name>
   <properties>
   <task.version>1.3.x-SNAPSHOT</task.version>
   </properties>
