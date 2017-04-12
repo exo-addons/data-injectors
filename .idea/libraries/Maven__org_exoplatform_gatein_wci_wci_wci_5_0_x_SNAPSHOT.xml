@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.exoplatform.gatein.wci:wci-wci:5.0.x-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/exoplatform/gatein/wci/wci-wci/5.0.x-SNAPSHOT/wci-wci-5.0.x-20170409.111219-67.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/exoplatform/gatein/wci/wci-wci/5.0.x-SNAPSHOT/wci-wci-5.0.x-20170409.111219-67-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/exoplatform/gatein/wci/wci-wci/5.0.x-SNAPSHOT/wci-wci-5.0.x-20170409.111219-67-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

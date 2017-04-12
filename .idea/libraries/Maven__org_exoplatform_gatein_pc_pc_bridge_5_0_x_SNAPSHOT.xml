@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.exoplatform.gatein.pc:pc-bridge:5.0.x-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/exoplatform/gatein/pc/pc-bridge/5.0.x-SNAPSHOT/pc-bridge-5.0.x-20170409.115457-75.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/exoplatform/gatein/pc/pc-bridge/5.0.x-SNAPSHOT/pc-bridge-5.0.x-20170409.115457-75-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/exoplatform/gatein/pc/pc-bridge/5.0.x-SNAPSHOT/pc-bridge-5.0.x-20170409.115457-75-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

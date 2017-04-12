@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.exoplatform.core:exo.core.component.organization.api:5.0.x-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/exoplatform/core/exo.core.component.organization.api/5.0.x-SNAPSHOT/exo.core.component.organization.api-5.0.x-20170409.112712-42.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/exoplatform/core/exo.core.component.organization.api/5.0.x-SNAPSHOT/exo.core.component.organization.api-5.0.x-20170409.112712-42-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/exoplatform/core/exo.core.component.organization.api/5.0.x-SNAPSHOT/exo.core.component.organization.api-5.0.x-20170409.112712-42-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

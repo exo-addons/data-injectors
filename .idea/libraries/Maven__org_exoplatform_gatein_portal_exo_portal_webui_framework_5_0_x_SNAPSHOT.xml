@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.exoplatform.gatein.portal:exo.portal.webui.framework:5.0.x-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/exoplatform/gatein/portal/exo.portal.webui.framework/5.0.x-SNAPSHOT/exo.portal.webui.framework-5.0.x-20170411.150037-56.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/exoplatform/gatein/portal/exo.portal.webui.framework/5.0.x-SNAPSHOT/exo.portal.webui.framework-5.0.x-20170411.150037-56-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/exoplatform/gatein/portal/exo.portal.webui.framework/5.0.x-SNAPSHOT/exo.portal.webui.framework-5.0.x-20170411.150037-56-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
