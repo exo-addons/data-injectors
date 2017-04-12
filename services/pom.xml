@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>data-injectors-configuration</artifactId>
+    <groupId>org.exoplatform.addons.injectors</groupId>
+    <version>1.0.x-SNAPSHOT</version>
+  </parent>
+  <artifactId>data-injectors-services</artifactId>
+  <packaging>jar</packaging>
+  <name>eXo Injector - Services</name>
+  <properties>
+  <task.version>1.3.x-SNAPSHOT</task.version>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.exoplatform.commons</groupId>
+      <artifactId>commons-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.commons</groupId>
+      <artifactId>commons-component-common</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.addons.task</groupId>
+      <artifactId>task-management-injector</artifactId>
+      <version>${task.version}</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.jcabi</groupId>
+        <artifactId>jcabi-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>
