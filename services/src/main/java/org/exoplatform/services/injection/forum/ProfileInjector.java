@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.forum.extras.injection.forum;
-
-import java.util.HashMap;
+package org.exoplatform.services.injection.forum;
 
 import org.exoplatform.services.organization.User;
+
+import java.util.HashMap;
 
 /**
  * @author <a href="mailto:thanhvc@exoplatform.com">Thanh Vu</a>

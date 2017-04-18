@@ -1,10 +1,4 @@
-package org.exoplatform.ecm.connector.platform;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Date;
+package org.exoplatform.services.injection.ecms;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Paragraph;
@@ -17,6 +11,12 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.sl.usermodel.Slide;
 import org.apache.poi.sl.usermodel.SlideShow;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Date;
 
 
 public class DocumentRenderer {

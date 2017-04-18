@@ -1,13 +1,12 @@
-package org.exoplatform.forum.extras.injection.poll;
-
-import java.util.HashMap;
-import java.util.Random;
-
+package org.exoplatform.services.injection.forum.poll;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.forum.extras.injection.utils.LoremIpsum4J;
+import org.exoplatform.services.injection.forum.utils.LoremIpsum4J;
 import org.exoplatform.poll.service.Poll;
 import org.exoplatform.poll.service.PollNodeTypes;
 import org.exoplatform.poll.service.Utils;
+
+import java.util.HashMap;
+import java.util.Random;
 
 public class PollInjector extends AbstractPollInjector {
 
@@ -25,7 +24,7 @@ public class PollInjector extends AbstractPollInjector {
 
   private boolean              isPublic          = true;
 
-  private LoremIpsum4J        ipsum4j;
+  private LoremIpsum4J ipsum4j;
 
   public PollInjector() {
     super();

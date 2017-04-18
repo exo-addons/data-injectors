@@ -1,18 +1,12 @@
-package org.exoplatform.forum.extras.injection.poll;
-
-import java.util.HashMap;
-import java.util.Random;
-
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
+package org.exoplatform.services.injection.forum.poll;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.service.ForumService;
-import org.exoplatform.forum.service.Utils;
 import org.exoplatform.forum.common.jcr.KSDataLocation;
 import org.exoplatform.forum.common.jcr.PropertyReader;
-import org.exoplatform.forum.extras.injection.utils.ExoNameGenerator;
-import org.exoplatform.forum.extras.injection.utils.LoremIpsum4J;
+import org.exoplatform.services.injection.forum.utils.ExoNameGenerator;
+import org.exoplatform.services.injection.forum.utils.LoremIpsum4J;
+import org.exoplatform.forum.service.ForumService;
+import org.exoplatform.forum.service.Utils;
 import org.exoplatform.poll.service.Poll;
 import org.exoplatform.poll.service.PollNodeTypes;
 import org.exoplatform.poll.service.PollService;
@@ -22,6 +16,11 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.GroupHandler;
 import org.exoplatform.services.organization.OrganizationService;
+
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import java.util.HashMap;
+import java.util.Random;
 
 public abstract class AbstractPollInjector extends DataInjector {
 
@@ -37,11 +36,11 @@ public abstract class AbstractPollInjector extends DataInjector {
 
   protected static final int           OPTION_DEFAULT_SIZE         = 5;
 
-  protected static PollService         pollService;
+  protected static PollService pollService;
 
-  protected static ForumService        forumService;
+  protected static ForumService forumService;
 
-  protected final KSDataLocation       locator;
+  protected final KSDataLocation locator;
 
   protected static OrganizationService organizationService;
 
@@ -71,9 +70,9 @@ public abstract class AbstractPollInjector extends DataInjector {
 
   protected ExoNameGenerator exoNameGenerator = new ExoNameGenerator();
 
-  protected LoremIpsum4J               lorem                       = new LoremIpsum4J();
+  protected LoremIpsum4J lorem                       = new LoremIpsum4J();
 
-  private static final Log             LOG                         = ExoLogger.getLogger(AbstractPollInjector.class);
+  private static final Log             LOG                         = ExoLogger.getLogger(org.exoplatform.services.injection.forum.poll.AbstractPollInjector.class);
 
   public static final String           POLL_TYPE                   = "type";
 

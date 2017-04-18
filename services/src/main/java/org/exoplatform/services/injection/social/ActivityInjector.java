@@ -1,4 +1,4 @@
-package org.exoplatform.services.injection.extras.social;
+package org.exoplatform.services.injection.social;
 
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.RequestLifeCycle;
@@ -8,7 +8,7 @@ import org.exoplatform.social.core.identity.model.Identity;
 import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
 import org.exoplatform.social.core.identity.provider.SpaceIdentityProvider;
 import org.exoplatform.social.core.storage.impl.StorageUtils;
-import org.exoplatform.social.extras.injection.utils.LoremIpsum4J;
+import org.exoplatform.services.injection.social.utils.LoremIpsum4J;
 
 import java.util.HashMap;
 

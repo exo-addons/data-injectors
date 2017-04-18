@@ -38,7 +38,7 @@
 
  */
 
-package org.exoplatform.forum.extras.injection.utils;
+package org.exoplatform.services.injection.forum.utils;
 
 /**
  * Simple lorem ipsum text generator.

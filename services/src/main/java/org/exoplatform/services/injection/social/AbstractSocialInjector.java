@@ -1,4 +1,4 @@
-package org.exoplatform.services.injection.extras.social;
+package org.exoplatform.services.injection.social;
 
 import org.chromattic.api.query.QueryBuilder;
 import org.exoplatform.commons.chromattic.ChromatticManager;
@@ -18,8 +18,8 @@ import org.exoplatform.social.core.space.spi.SpaceService;
 import org.exoplatform.social.core.storage.api.IdentityStorage;
 import org.exoplatform.social.core.storage.impl.AbstractStorage;
 import org.exoplatform.social.core.storage.query.WhereExpression;
-import org.exoplatform.social.extras.injection.utils.LoremIpsum4J;
-import org.exoplatform.social.extras.injection.utils.NameGenerator;
+import org.exoplatform.services.injection.social.utils.LoremIpsum4J;
+import org.exoplatform.services.injection.social.utils.NameGenerator;
 
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.HashMap;

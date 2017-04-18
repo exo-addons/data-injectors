@@ -15,32 +15,26 @@
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
 
-package org.exoplatform.forum.extras.injection.forum;
-
-import java.util.HashMap;
-import java.util.Random;
-
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
+package org.exoplatform.services.injection.forum;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.service.Category;
-import org.exoplatform.forum.service.Forum;
-import org.exoplatform.forum.service.ForumService;
-import org.exoplatform.forum.service.Post;
-import org.exoplatform.forum.service.Topic;
-import org.exoplatform.forum.service.Utils;
-import org.exoplatform.forum.service.impl.JCRDataStorage;
 import org.exoplatform.forum.common.jcr.KSDataLocation;
 import org.exoplatform.forum.common.jcr.PropertyReader;
-import org.exoplatform.forum.extras.injection.utils.ExoNameGenerator;
-import org.exoplatform.forum.extras.injection.utils.LoremIpsum4J;
+import org.exoplatform.services.injection.forum.utils.ExoNameGenerator;
+import org.exoplatform.services.injection.forum.utils.LoremIpsum4J;
+import org.exoplatform.forum.service.*;
+import org.exoplatform.forum.service.impl.JCRDataStorage;
 import org.exoplatform.services.bench.DataInjector;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserHandler;
+
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import java.util.HashMap;
+import java.util.Random;
 
 /**
  * @author <a href="mailto:thanhvc@exoplatform.com">ThanhVu</a>

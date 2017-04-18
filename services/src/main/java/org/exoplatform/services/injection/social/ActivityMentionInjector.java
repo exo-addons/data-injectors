@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.services.injection.extras.social;
+package org.exoplatform.services.injection.social;
 
 import org.exoplatform.social.core.activity.model.ExoSocialActivity;
 import org.exoplatform.social.core.activity.model.ExoSocialActivityImpl;
 import org.exoplatform.social.core.identity.model.Identity;
 import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
-import org.exoplatform.social.extras.injection.utils.LoremIpsum4J;
+import org.exoplatform.services.injection.social.utils.LoremIpsum4J;
 
 import java.util.HashMap;
 

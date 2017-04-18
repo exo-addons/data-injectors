@@ -1,4 +1,4 @@
-package org.exoplatform.social.extras.injection.utils;
+package org.exoplatform.services.injection.social.utils;
 
 
 import java.io.BufferedReader;

@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.forum.extras.injection.poll;
-
-import java.util.HashMap;
+package org.exoplatform.services.injection.forum.poll;
 
 import org.exoplatform.services.organization.Group;
+
+import java.util.HashMap;
 
 public class GroupInjector extends AbstractPollInjector {
 

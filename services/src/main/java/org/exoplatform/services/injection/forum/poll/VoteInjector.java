@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.forum.extras.injection.poll;
-
-import java.util.HashMap;
-import java.util.Random;
+package org.exoplatform.services.injection.forum.poll;
 
 import org.exoplatform.poll.service.Poll;
 import org.exoplatform.poll.service.Utils;
+
+import java.util.HashMap;
+import java.util.Random;
 
 public class VoteInjector extends AbstractPollInjector {
 

@@ -1,19 +1,192 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-               xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+               xsi:schemaLocation="http://www.exoplatform.org/xml/ns/kernel_1_2.xsd http://www.exoplatform.org/xml/ns/kernel_1_2.xsd"
+               xmlns="http://www.exoplatform.org/xml/ns/kernel_1_2.xsd">
+
+    <component>
+        <type>org.exoplatform.services.injection.social.PatternInjectorConfig</type>
+        <init-params>
+            <value-param>
+                <name>user-suffix-length</name>
+                <value>4</value><!-- it's suffix length of user, -1 without suffix pattern -->
+            </value-param>
+            <value-param>
+                <name>space-suffix-length</name>
+                <value>5</value><!-- it's suffix length of space name, -1 without suffix pattern -->
+            </value-param>
+            <value-param>
+                <name>user-password-default</name>
+                <value>exo</value><!-- it's user's password, default is "exo" -->
+            </value-param>
+        </init-params>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.social.IdentityInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.social.SpaceInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.social.MembershipInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.social.ActivityInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.social.ActivityMentionInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.social.RelationshipInjector</type>
+    </component>
 
     <component>
         <type>org.exoplatform.services.bench.DataInjectorService</type>
     </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.forum.ProfileInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.forum.CategoryInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.forum.ForumInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.forum.TopicInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.forum.PostInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.forum.AttachmentInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.forum.MembershipInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.forum.poll.GroupInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.forum.poll.PollInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.forum.poll.VoteInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.ecms.PopulateConnector</type>
+    </component>
+
 
     <external-component-plugins>
         <target-component>org.exoplatform.services.bench.DataInjectorService</target-component>
         <component-plugin>
             <name>PersonnalTaskInjector</name>
             <set-method>addInjector</set-method>
-            <type>org.exoplatform.injector.services.task.TaskInjector</type>
+            <type>org.exoplatform.services.injection.task.TaskInjector</type>
             <description>inject data to Task for performance test</description>
+        </component-plugin>
+        <component-plugin>
+            <name>identity</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.social.IdentityInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>space</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.social.SpaceInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>membership</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.social.MembershipInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>activity</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.social.ActivityInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>mentioner</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.social.ActivityMentionInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>relationship</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.social.RelationshipInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>forumProfile</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.forum.ProfileInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>forumCategory</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.forum.CategoryInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>forumForum</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.forum.ForumInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>forumTopic</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.forum.TopicInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>forumPost</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.forum.PostInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>forumMembership</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.forum.MembershipInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>forumAttachment</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.forum.AttachmentInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>pollGroup</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.forum.poll.GroupInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>pollPoll</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.forum.poll.PollInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>pollVote</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.forum.poll.VoteInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>WikiDataInjector</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.wiki.WikiDataInjector</type>
+            <description>inject data for Wiki</description>
         </component-plugin>
     </external-component-plugins>
 </configuration>

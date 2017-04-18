@@ -1,12 +1,12 @@
-package org.exoplatform.forum.extras.injection.forum;
-
-import java.util.Arrays;
-import java.util.HashMap;
+package org.exoplatform.services.injection.forum;
 
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.MessageBuilder;
 import org.exoplatform.forum.service.Topic;
+
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class MembershipInjector extends AbstractForumInjector {
 

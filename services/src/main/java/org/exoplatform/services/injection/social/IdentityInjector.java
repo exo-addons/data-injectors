@@ -1,4 +1,4 @@
-package org.exoplatform.services.injection.extras.social;
+package org.exoplatform.services.injection.social;
 
 import org.exoplatform.services.organization.User;
 import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;

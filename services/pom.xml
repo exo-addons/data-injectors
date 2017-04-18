@@ -11,8 +11,45 @@
   <name>Data Injectors - Services</name>
   <properties>
   <task.version>1.3.x-SNAPSHOT</task.version>
+    <social.version>5.0.x-SNAPSHOT</social.version>
   </properties>
   <dependencies>
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.container</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.servlet</groupId>
+          <artifactId>javax.servlet-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.chromattic</groupId>
+      <artifactId>chromattic.api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.organization.api</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>xpp3</groupId>
+          <artifactId>xpp3_min</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.social</groupId>
+      <artifactId>social-component-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.social</groupId>
+      <artifactId>social-component-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.commons</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.exoplatform.commons</groupId>
       <artifactId>commons-api</artifactId>
@@ -27,6 +64,34 @@
       <groupId>org.exoplatform.addons.task</groupId>
       <artifactId>task-management-injector</artifactId>
       <version>${task.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.social</groupId>
+      <artifactId>social-extras-injection</artifactId>
+      <version>5.0.x-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.forum</groupId>
+      <artifactId>forum-extras-injection</artifactId>
+      <version>5.0.x-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.wiki</groupId>
+      <artifactId>wiki-injector</artifactId>
+      <version>5.0.x-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+    <groupId>org.exoplatform.ecms</groupId>
+    <artifactId>ecms-ext-data-injector</artifactId>
+    <version>5.0.x-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.ecms</groupId>
+      <artifactId>ecms-core-services</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.ecms</groupId>
+      <artifactId>ecms-core-publication</artifactId>
     </dependency>
   </dependencies>
   <build>
