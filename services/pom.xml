@@ -10,7 +10,7 @@
   <packaging>jar</packaging>
   <name>Data Injectors - Services</name>
   <properties>
-  <task.version>1.3.x-SNAPSHOT</task.version>
+    <task.version>1.3.x-SNAPSHOT</task.version>
     <social.version>5.0.x-SNAPSHOT</social.version>
   </properties>
   <dependencies>
@@ -19,8 +19,8 @@
       <artifactId>exo.kernel.container</artifactId>
       <exclusions>
         <exclusion>
-          <groupId>javax.servlet</groupId>
           <artifactId>javax.servlet-api</artifactId>
+          <groupId>javax.servlet</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -33,8 +33,8 @@
       <artifactId>exo.core.component.organization.api</artifactId>
       <exclusions>
         <exclusion>
-          <groupId>xpp3</groupId>
           <artifactId>xpp3_min</artifactId>
+          <groupId>xpp3</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -81,9 +81,9 @@
       <version>5.0.x-SNAPSHOT</version>
     </dependency>
     <dependency>
-    <groupId>org.exoplatform.ecms</groupId>
-    <artifactId>ecms-ext-data-injector</artifactId>
-    <version>5.0.x-SNAPSHOT</version>
+      <groupId>org.exoplatform.ecms</groupId>
+      <artifactId>ecms-ext-data-injector</artifactId>
+      <version>5.0.x-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.ecms</groupId>
