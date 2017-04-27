@@ -93,6 +93,33 @@
         <type>org.exoplatform.services.injection.ecms.PopulateConnector</type>
     </component>
 
+    <component>
+        <type>org.exoplatform.services.injection.answers.CategoryInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.answers.AnswerInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.answers.ProfileInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.answers.QuestionInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.answers.CommentInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.answers.AttachmentInjector</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.answers.MembershipInjector</type>
+    </component>
 
     <external-component-plugins>
         <target-component>org.exoplatform.services.bench.DataInjectorService</target-component>
@@ -187,6 +214,41 @@
             <set-method>addInjector</set-method>
             <type>org.exoplatform.services.injection.wiki.WikiDataInjector</type>
             <description>inject data for Wiki</description>
+        </component-plugin>
+        <component-plugin>
+            <name>faqProfile</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.answers.ProfileInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>faqCategory</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.answers.CategoryInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>faqQuestion</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.answers.QuestionInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>faqAnswer</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.answers.AnswerInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>faqComment</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.answers.CommentInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>faqAttachment</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.answers.AttachmentInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>faqMembership</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.answers.MembershipInjector</type>
         </component-plugin>
     </external-component-plugins>
 </configuration>
