@@ -1,7 +1,7 @@
 **eXo data-injectors**
 ==========================
 
-A**data injectors** for eXo that allows administrators to inject content types
+A **data injectors** for eXo that allows administrators to inject content types
  such as: social (users, connections, spaces, membership),forum (post, topic), wiki (wiki page), ecms (pdf, doc, xls,... document), FAQ(category,questions,answers..)
 
 
@@ -17,9 +17,9 @@ The format of request link is:
 
 So, simply:
 
-1:login to the PLF first 
+1: login to the PLF first 
 
-2:call rest services
+2: call rest services
 
 
  SOCIAL Inject:
