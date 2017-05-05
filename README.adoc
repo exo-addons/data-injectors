@@ -317,9 +317,15 @@ WIKI inject and ECMS inject doesn't work, So it must be reviewed ..
 |===
 |eXo data-injectors Version  | eXo Platform Version
 
+
 |1.0.x
 |4.4.1
 
+|1.0.x
+|4.4.x
+
+|1.0.x
+|5.0.x
 |===
 
 
