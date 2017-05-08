@@ -30,6 +30,24 @@ We will describe how to use data injectors in eXo Social
 
 *inject identity*
 
+|===
+|Parameter | Description
+
+|number
+|The amount of injected users
+
+|prefix
+|(optional) Define the user prefix. Default value is "bench.user"
+
+|pattern
+|(optional) Define the user suffix
+
+ if pattern=0000&number=100&prefix=abc => 100 users will be created:
+    abc0000, abc0001,... abc0099
+
+|===
+
+
  http://localhost:8080/rest/private/bench/inject/identity?pattern=0000&number=100&prefix=abc
 
  --> identity injected successfully!!!
@@ -37,6 +55,27 @@ We will describe how to use data injectors in eXo Social
 * This call will generate 100 users with prefix=abc
 
 *inject space*
+
+|===
+|Parameter |Description
+
+|fromUser
+|The begin of the range
+
+|toUser
+|The end of the range
+
+|number
+|The amount of injected spaces for each user or space
+
+|userPrefix
+|(optional) Define the user prefix. Default value is "bench.user"
+
+
+|spacePrefix
+|(optional) Define the space prefix. Default value is "bench.space"
+|===
+
 
   http://localhost:8080/rest/private/bench/inject/space?number=10&fromUser=1000&toUser=1009
 
@@ -47,6 +86,33 @@ Each user in the range will be the owner (manager) of the space.
 
 *inject membership*
 
+
+|===
+|Parameter |Description
+
+|type
+|must be set as 'member' or 'manager' (mandatory)
+
+|fromUser
+|The begin of the range
+
+|toUser
+|The end of the range
+
+|userPrefix
+|(optional) Define the user prefix. Default value is "bench.user"
+
+|fromSpace
+|The begin of the range
+
+|toSpace
+|The end of the range
+
+|spacePrefix
+|(optional) Define the space prefix.Default value is "bench.space"
+
+|===
+
  http://localhost:8080/rest/private/bench/inject/membership?type=member&fromUser=100&toUser=120&userPrefix=bench.user&fromSpace=10&toSpace=20&spacePrefix=bench.space
 
  --> membership injected successfully!!!
@@ -55,6 +121,30 @@ Each user in the range will be the owner (manager) of the space.
 
 
 *inject activity*
+
+
+|===
+|Parameter |Description
+
+|fromUser
+|The begin of the range
+
+|toUser
+|The end of the range
+
+|number
+|The amount of injected activities for each user
+
+|type
+|must be set as 'user' or 'space' (mandatory)
+
+|userPrefix
+|(optional) Define the user prefix. Default value is "bench.user"
+
+|spacePrefix
+|optional) Define the space prefix. Default value is "bench.space"
+|===
+
 
 ** for user
 
@@ -75,6 +165,27 @@ Each user in the range will be the owner (manager) of the space.
 
 *inject activity mention*
 
+
+|===
+|Parameter |Description
+
+|fromUser
+|The begin of the range
+
+|toUser
+|The end of the range
+
+|number
+|The amount of injected activities for each user
+
+|mentioner
+|must be set as remoteId who has been mentioned (mandatory)
+
+|userPrefix
+|(optional) Define the user prefix. Default value is "bench.user"
+
+|===
+
    http://localhost:8080/rest/private/bench/inject/mentioner?number=2&fromUser=0020&toUser=0030&mentioner=abc0050&userPrefix=abc
 
  --> mentioner injected successfully!!!
@@ -82,6 +193,23 @@ Each user in the range will be the owner (manager) of the space.
 
 *inject relationship*
 
+
+|===
+|Parameter |Description
+
+|fromUser
+|The begin of the range
+
+|toUser
+|The end of the range
+
+|number
+|The amount of injected relationships for each user
+
+|prefix
+|(optional) Define the user prefix. Default value is "bench.user"
+
+|===
   http://localhost:8080/rest/private/bench/inject/relationship?number=19&fromUser=5100&toUser=5119&type=user
 
  * This call will generate 19 relations for each users in the range 5100 - 5119
@@ -93,6 +221,17 @@ We will describe how to use data injectors in eXo Forum
 
 *inject profile*
 
+
+|===
+|Parameter |Description
+
+|number
+|The amount of injected users
+
+|prefix
+|(optional) Define the user prefix. Default value is "bench.user"
+|===
+
  http://localhost:8080/rest/private/bench/inject/forumProfile?number=100&prefix=abc.user
 
  --> forumProfile injected successfully!!!
@@ -100,6 +239,26 @@ We will describe how to use data injectors in eXo Forum
 * This call will generate 100 users
 
 *inject category*
+
+|===
+|Parameter |Description
+
+|number
+|The amount of injected categories for each user
+
+|fromUser
+|The begin of the range
+
+|toUser
+|The end of the range
+
+|userPrefix
+|(optional) Define the user prefix. Default value is "bench.user"
+
+|catPrefix
+|(optional) Define the category prefix. Default value is "bench.cat"
+
+|===
 
  http://localhost:8080/rest/private/bench/inject/forumCategory?number=10&fromUser=1000&toUser=1009
 
@@ -109,13 +268,56 @@ We will describe how to use data injectors in eXo Forum
 
 *inject forum*
 
+|===
+|Parameter |Description
+
+|number
+|The amount of injected forum for each category.
+
+|forumPrefix
+|(optional) Define the forum prefix. Default value is "bench.forum"
+
+|toCat
+|Injected forum to category
+
+|catPrefix
+|(optional) Define the category prefix. Default value is "bench.category"
+
+|===
+
  http://localhost:8080/rest/private/bench/inject/forumForum?number=4&toCat=15&catPrefix=abc.cat&forumPrefix=abc.forum
 
  --> forumForum injected successfully!!!
 
 * This call will generate 4 forums for category at 15 position = 4 forums.
 
+
 *inject topic*
+
+|===
+|Parameter |Description
+
+|number
+|The amount of injected topic own by each user in range into each forum in range
+
+|topicPrefix
+|(optional) Define the topic prefix. Default value is "bench.topic"
+
+|fromUser
+|The begin of the range
+
+|toUser
+|The end of the range
+
+|userPrefix
+|(optional) Define the user prefix. Default value is "bench.user"
+
+|toForum
+|Injected topic to forum
+
+|forumPrefix
+|(optional) Define the forum prefix. Default value is "bench.forum"
+|===
 
  http://localhost:8080/rest/private/bench/inject/forumTopic?number=10&topicPrefix=abc.topic&fromUser=1000&toUser=1009&userPrefix=abc.user&toForum=19&forumPrefix=abc.forum
 
@@ -126,13 +328,62 @@ We will describe how to use data injectors in eXo Forum
 
 *inject post*
 
+|===
+|Parameter |Description
+
+|number
+|The amount of injected post for each users in range into each topics
+
+|postPrefix
+|(optional) Define the post prefix. Default value is "bench.post"
+
+|fromUser
+|The begin of the range
+
+|toUser
+|The end of the range
+
+|userPrefix
+|(optional) Define the user prefix. Default value is "bench.user"
+
+|toTopic
+|Injected post to topic
+
+|topicPrefix
+|(optional) Define the topic prefix. Default value is "bench.topic"
+|===
+
+
  http://localhost:8080/rest/private/bench/inject/forumPost?number=10&postPrefix=abc.post&fromUser=1000&toUser=1009&userPrefix=abc.user&toTopic=19&topicPrefix=abc.topic
 
  --> forumPost injected successfully!!!
 
 * This call will generate 10 posts for each users in the range 1000 - 1009 into for each topic at 19 position = 10(posts) x 10(users) x 1 = 100 topics
 
+
 *inject membership*
+
+|===
+|Parameter |Description
+
+|type
+|must be set as 'category', 'forum', or 'topic' (mandatory)
+
+|toType
+|Determines index of type for injection. ex: '5'
+
+|typePrefix
+|Define type of type prefix. ex: 'cat.forum' => for type is 'category'
+
+|fromUser
+|The begin of the range
+
+|toUser
+|The end of the range
+
+|userPrefix
+|(optional) Define the user prefix. Default value is "bench.user"
+|===
 
  http://localhost:8080/rest/private/bench/inject/forumMembership?type=category&toType=5&typePrefix=abc.cat&fromUser=1000&toUser=1009&userPrefix=abc.user
 
@@ -142,6 +393,26 @@ We will describe how to use data injectors in eXo Forum
 
 *inject attachment*
 
+|===
+|Parameter |Description
+
+|number
+|The amount of injected attachment for each posts in range
+
+|postPrefix
+|(optional) Define the post prefix. Default value is "bench.post"
+
+|fromPost
+ | The begin of the range
+
+|toPost
+|The end of the range
+
+|byteSize
+|(optional) Define the size of attachment. Default value is 100 bytes
+|===
+
+
  http://localhost:8080/rest/private/bench/inject/forumAttachment?number=10&postPrefix=abc.post&fromPost=1000&toPost=1019&byteSize=50
 
  --> forumAttachment injected successfully!!!
@@ -150,6 +421,60 @@ We will describe how to use data injectors in eXo Forum
 
 
 === TASK Inject
+
+==== Parameters
+Each parameter is optionnal because they all have a default value.
+
+
+|===
+|Parameter |Description |Default
+
+|nbProject
+|Number of project per user/space
+|15
+
+|nbTaskPerProject
+|Number of tasks in a project
+|42
+
+|nbIncomingTask
+|Number of tasks without project per user
+|10
+
+|nbTagPerTask
+|Number of tags per task
+|2
+
+|nbComPerTask
+|Number of comments per task
+|2
+
+|perCompleted
+|Percentage of tasks completed
+|70
+
+|type
+|Type of injecting: "user" or "space"
+|"user"
+
+|from
+|The begin of the range
+|0
+
+|to
+|The end of the range
+|10
+
+|prefix
+|Define the user prefix
+|"bench.space" if type = "space", "bench.user" otherwise
+
+|suffix
+|Define the user suffix (How many digit after prefix)
+|4
+|===
+
+
 
 We will describe how to use data injectors in eXo TASK:
 
@@ -205,6 +530,16 @@ We will describe how to use data injectors in eXo FAQ
 
 *inject profile*
 
+|===
+|Parameter |Description
+
+|number
+|The amount of injected users
+
+|userPrefix
+|(optional) Define the user prefix. Default value is "bench.user".
+|===
+
  http://localhost:8080/rest/private/bench/inject/faqProfile?number=10&userPrefix=abc.user
 
   --> faqProfile injected successfully!!!
@@ -212,6 +547,18 @@ We will describe how to use data injectors in eXo FAQ
  * This call will generate 10 users which user prefix is "abc.user"
 
 *inject category*
+
+
+|===
+|Parameter |Description
+
+|number
+|The amount of injected categories.
+
+|catPrefix
+|(optional) Define the category prefix. Default value is "bench.cat".
+|===
+
 
    http://localhost:8080/rest/private/bench/inject/faqCategory?number=10&catPrefix=abc.cat
 
@@ -222,6 +569,29 @@ We will describe how to use data injectors in eXo FAQ
 
 *inject question*
 
+|===
+|Parameter |Description
+
+|number
+|The amount of injected questions for each category.
+
+|catPrefix
+|(optional) Define the category prefix. Default value is "bench.cat".
+
+|toCat
+|The category which will be used to inject questions.
+
+|userPrefix
+|(optional) Define the user prefix. Default value is "bench.user".
+
+|toUser
+|The user who owns the injected question.
+
+|quesPrefix
+|(optional) Define the question prefix. Default value is "bench.ques"
+|===
+
+
    http://localhost:8080/rest/private/bench/inject/faqQuestion?number=10&catPrefix=abc.cat&toCat=0&userPrefix=abc.user&toUser=1&quesPrefix=abc.ques
 
    --> faqQuestion injected successfully!!!
@@ -230,6 +600,27 @@ We will describe how to use data injectors in eXo FAQ
 
 
 *inject answer*
+
+
+|===
+|Parameter |Description
+
+|number
+|The amount of injected answers.
+
+|fromQues
+|The begin of the question range which injected answers are added to
+
+|toQues
+|The end of the question range which injected answers are added to
+
+|quesPrefix
+|(optional) Define the question prefix. Default value is "bench.ques"
+
+|answerPrefix
+|(optional) Define the answer prefix. Default value is "bench.answer"
+|===
+
 
    http://localhost:8080/rest/private/bench/inject/faqAnswer?number=10&fromQues=0&toQues=2&quesPrefix=abc.ques&answerPrefix=abc.answer
 
@@ -240,6 +631,25 @@ We will describe how to use data injectors in eXo FAQ
 
 *inject comment*
 
+
+|===
+|Parameter |Description
+
+|number
+|The amount of injected comments
+
+|toQues
+|The question which injected comments are added to
+
+|quesPrefix
+|(optional) Define the question prefix. Default value is "bench.ques"
+
+
+|commentPrefix
+|(optional) Define the comment prefix. Default value is "bench.comment"
+|===
+
+
    http://localhost:8080/rest/private/bench/inject/faqComment?number=10&toQues=0&quesPrefix=abc.ques&commentPrefix=abc.comment
 
   --> faqComment injected successfully!!!
@@ -249,6 +659,26 @@ We will describe how to use data injectors in eXo FAQ
 
 *inject attachment*
 
+|===
+|Parameter |Description
+
+|number
+|The amount of injected attachments
+
+|fromQues
+|The begin of the question range which injected attachments are added to
+
+|toQues
+|The end of the question range which injected attachments are added to
+
+|byteSize
+|The size in byte unit of each added attachment. (Range from 0 to 99)
+
+|quesPrefix
+|(optional) Define the question prefix. Default value is "bench.ques"
+|===
+
+
    http://localhost:8080/rest/private/bench/inject/faqAttachment?number=10&fromQues=0&toQues=2&quesPrefix=abc.ques&byteSize=50
 
   --> faqAttachment injected successfully!!!
@@ -257,6 +687,30 @@ We will describe how to use data injectors in eXo FAQ
 
 
 *inject Membership*
+
+
+|===
+|Parameter |Description
+
+|type
+|must be set as 'category', 'question', or 'answer' (mandatory)
+
+|toType
+|Determines index of type for injection. ex: '5'
+
+|typePrefix
+|(optional) Define type of type prefix. ex: 'abc.cat' => for type is 'category'
+
+|fromUser
+|The begin of the user range
+
+|toUser
+|The end of the user range
+
+|userPrefix
+|(optional) Define the user prefix. Default value is "bench.user"
+|===
+
 
    http://localhost:8080/rest/private/bench/inject/faqMembership?type=category&toType=0&typePrefix=abc.cat&fromUser=0&toUser=2&userPrefix=abc.user
 
@@ -271,6 +725,18 @@ We will describe how to use data injectors in eXo Poll
 
 *inject grp*
 
+
+|===
+|Parameter |Description
+
+|number
+|The amount of injected groups
+
+|prefix
+|(optional) Define the group prefix. Default value is "bench.group"
+|===
+
+
   http://localhost:8080/rest/private/bench/inject/pollGroup?number=20&prefix=abc.group
 
   --> pollGroup injected successfully!!!
@@ -280,7 +746,27 @@ We will describe how to use data injectors in eXo Poll
 
 *inject poll*
 
-   * *Public*
+|===
+|Parameter |Description
+
+|number
+|The amount of injected polls for the group
+
+|pollType
+|The type of the Poll (public | private)
+
+
+|groupPrefix
+|(optional) Define the group prefix. Default value is "bench.group"
+
+|pollPrefix
+|(optional) Define the poll prefix. Default value is "bench.poll"
+
+|toGroup
+|The range of the group for injected polls
+|===
+
+  * *Public*
 
     http://localhost:8080/rest/private/bench/inject/pollPoll?pollType=public&number=10&pollPrefix=pub.poll
 
@@ -298,6 +784,30 @@ We will describe how to use data injectors in eXo Poll
     ** This call will generate 10 polls for the group abc.group1.
 
 *inject vote*
+
+
+|===
+|Parameter |Description
+
+|fromPoll
+|The range of the poll for start vote polls
+
+|toPoll
+|The range of the poll for end vote polls
+
+|pollPrefix
+|(optional) Define the poll prefix. Default value is "bench.poll"
+
+|fromUser
+|The range of the user
+
+|toUser
+|The range of the user.
+
+|userPrefix
+|(optional) Define the user prefix. Default value is "bench.user"
+|===
+
 
     http://localhost:8080/rest/private/bench/inject/pollVote?fromPoll=1&toPoll=100&pollPrefix=bench.poll&fromUser=10&toUser=50&userPrefix=abc.user
 
