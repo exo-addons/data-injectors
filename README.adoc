@@ -31,19 +31,21 @@ We will describe how to use data injectors in eXo Social
 *inject identity*
 
 |===
-|Parameter | Description
+|Parameter | Type | Description | Default
 
 |number
+|mandatory
 |The amount of injected users
 
 |prefix
-|(optional) Define the user prefix. Default value is "bench.user"
+|optional
+|Define the user prefix
+| "bench.user"
 
 |pattern
-|(optional) Define the user suffix
-
- if pattern=0000&number=100&prefix=abc => 100 users will be created:
-    abc0000, abc0001,... abc0099
+|optional
+|Define the user suffix
+| 0000
 
 |===
 
