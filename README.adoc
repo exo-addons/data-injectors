@@ -36,7 +36,7 @@ We will describe how to use data injectors in eXo Social
 |number
 |mandatory
 |The amount of injected users
-|       -
+|NA
 
 
 |prefix
