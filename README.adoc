@@ -36,7 +36,7 @@ We will describe how to use data injectors in eXo Social
 |number
 |mandatory
 |The amount of injected users
-|
+| -
 
 
 |prefix
@@ -95,7 +95,7 @@ We will describe how to use data injectors in eXo Social
 
  --> space injected successfully!!!
 
-* This call will generate 10 spaces for each users in the range 1000 - 1009 = 100 spaces
+* This call will generate for each user in the range [1000 - 1009] 10 spaces.. So 100 spaces will be created
 Each user in the range will be the owner (manager) of the space.
 
 *inject membership*
@@ -145,7 +145,7 @@ Each user in the range will be the owner (manager) of the space.
 
  --> membership injected successfully!!!
 
-* This call will add each users in the range 100 - 120 = 20 users to be member for each space in range 10 - 20 = 10 spaces with prefix.
+* This call will add each user in the range [100 - 120] to be member for each space in range [10 - 20] with prefix.
 
 
 *inject activity*
@@ -192,7 +192,7 @@ Each user in the range will be the owner (manager) of the space.
 
  --> activity injected successfully!!!
 
- * This call will generate 50 activities for each users in the range 0000 - 0019 = 40 activities
+ * This call will generate for each user in the range [0000 - 0019] 2 activities..So 40 activities will be created
 
 ** for space
 
@@ -200,7 +200,7 @@ Each user in the range will be the owner (manager) of the space.
 
  --> activity injected successfully!!!
 
- * This call will generate 5 activities for each spaces in the range 0010 - 0049 = 200 activities
+ * This call will generate for each space in the range [0010 - 0049] 5 activities..So 200 activities will be created
 
 
 *inject activity mention*
@@ -270,7 +270,7 @@ Each user in the range will be the owner (manager) of the space.
 |===
   http://localhost:8080/rest/private/bench/inject/relationship?number=19&fromUser=5100&toUser=5119&type=user
 
- * This call will generate 19 relations for each users in the range 5100 - 5119
+ * This call will generate for each user in the range [5100 - 5119] 19 relations
 
 
 === FORUM Inject
@@ -335,7 +335,7 @@ We will describe how to use data injectors in eXo Forum
 
  --> forumCategory injected successfully!!!
 
-* This call will generate 10 categories for each users in the range 1000 - 1009 = 100 categories.
+* This call will generate for each user in the range [1000 - 1009] 10 categories..So 100 categories will be created
 
 *inject forum*
 
@@ -368,7 +368,7 @@ We will describe how to use data injectors in eXo Forum
 
  --> forumForum injected successfully!!!
 
-* This call will generate 4 forums for category at 15 position = 4 forums.
+* This call will generate 4 forums for category at 15 position
 
 
 *inject topic*
@@ -417,7 +417,7 @@ We will describe how to use data injectors in eXo Forum
 
  --> forumTopic injected successfully!!!
 
-* This call will generate 10 topics for each users in the range 1000 - 1009 into to forum at 19 position = 10(topics) x 10(users) x 1 = 100 topics
+* This call will generate for each user in the range [1000 - 1009] 10 topics into to forum at 19 position ..So 100 topics will be created
 
 *inject post*
 
@@ -465,7 +465,7 @@ We will describe how to use data injectors in eXo Forum
 
  --> forumPost injected successfully!!!
 
-* This call will generate 10 posts for each users in the range 1000 - 1009 into for each topic at 19 position = 10(posts) x 10(users) x 1 = 100 topics
+* This call will generate for each user in the range [1000 - 1009] 10 posts into for each topic at 19 position..So 100 posts will be created
 
 
 *inject membership*
@@ -548,7 +548,7 @@ We will describe how to use data injectors in eXo Forum
 
  --> forumAttachment injected successfully!!!
 
-* This call will generate 10 attachments for each posts in the range 1000 - 1019 = 20 with total size = 1000 bytes
+* This call will generate for each post in the range [1000 - 1019] 10 attachments..So 200 attachments will be created  with total size = 10000 bytes
 
 
 === TASK Inject
@@ -622,7 +622,8 @@ We will describe how to use data injectors in eXo TASK:
 *Default for user tasks*
 
 * Generate for 10 users (from bench.user0000 to bench.user0009) 15 projects with 42 tasks in + 10 incoming tasks (tasks without project).
- Each tasks have 2 tags and 2 comments. 70% of tasks are completed
+ Each tasks have 2 tags and 2 comments.
+ 70% of tasks are completed
 
  http://localhost:8080/rest/private/bench/inject/PersonnalTaskInjector
 
@@ -632,7 +633,8 @@ We will describe how to use data injectors in eXo TASK:
 *Specific for user tasks*
 
  * Generate for 10 users (from abcuser000010 to abcuser000019) **15 projects** with **42 tasks** in + 10 incoming tasks (tasks without project).
-   Each tasks have 2 tags and 2 comments. 70% of tasks are completed.
+   Each tasks have 2 tags and 2 comments.
+   70% of tasks are completed.
 
   http://localhost:8080/rest/private/bench/inject/PersonnalTaskInjector?prefix=abcuser&suffix=6&from=10&to=20
 
@@ -640,7 +642,8 @@ We will describe how to use data injectors in eXo TASK:
 
 
  * Generate for 10 users (from bench.user0000 to bench.user0009) **30 projects** with **10 tasks** in + 5 incoming tasks (tasks without project).
-   Each tasks have 3 tags and 15 comments. 70% of tasks are completed.
+   Each tasks have 3 tags and 15 comments.
+    70% of tasks are completed.
 
   http://localhost:8080/rest/private/bench/inject/PersonnalTaskInjector?nbProject=30&nbTaskPerProject=10&nbIncomingTask=5&nbTagPerTask=3&nbComPerTask=15
 
@@ -648,7 +651,8 @@ We will describe how to use data injectors in eXo TASK:
 
 
  * Generate for 10 users (from bench.user0000 to bench.user0009) **15 projects** with **42 tasks** in + 10 incoming tasks (tasks without project).
-   Each tasks have 2 tags and 2 comments. 0% of tasks are completed
+   Each tasks have 2 tags and 2 comments.
+   0% of tasks are completed
 
  http://localhost:8080/rest/private/bench/inject/PersonnalTaskInjector?perCompleted=0
 
@@ -657,7 +661,8 @@ We will describe how to use data injectors in eXo TASK:
 *Default for space tasks*
 
  * Generate for 10 space (from benchspace0000 to benchspace0009) **15 projects** with **42 tasks** in.
-   Each tasks have 2 tags and 2 comments. 70% of tasks are completed.
+   Each tasks have 2 tags and 2 comments.
+   70% of tasks are completed.
 
  http://localhost:8080/rest/private/bench/inject/PersonnalTaskInjector?type=space
 
@@ -924,7 +929,6 @@ We will describe how to use data injectors in eXo Poll
 
 *inject grp*
 
-
 |===
 |Parameter |Type |Description |Default value
 
@@ -994,7 +998,7 @@ We will describe how to use data injectors in eXo Poll
 
     --> pollPoll injected successfully!!!
 
-    ** This call will generate 10 polls for the group abc.group1.
+    ** This call will generate 10 private polls for the group abc.group1.
 
 *inject vote*
 
@@ -1037,12 +1041,12 @@ We will describe how to use data injectors in eXo Poll
 
     --> pollVote injected successfully!!!
 
-    * This call will voting 99 public polls from 1 to 100 with polls have prefix is bench.poll and with 40 users voting have index is from 10 to 50 with prefix is abc.user.
+    * This call will voting 99 public polls [1-100] with poll prefix is bench.poll and with 40 users voting have index [10-50] with prefix is abc.user.
 
 
 
 === Note:
-WIKI inject and ECMS inject doesn't work, So it must be reviewed ..
+WIKI inject and ECMS inject doesn't work..So it must be reviewed .
 
 
 == eXo Platform Compatibility
