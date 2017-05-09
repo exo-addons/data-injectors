@@ -36,7 +36,7 @@ We will describe how to use data injectors in eXo Social
 |number
 |mandatory
 |The amount of injected users
-| -
+|    -
 
 
 |prefix
@@ -96,6 +96,7 @@ We will describe how to use data injectors in eXo Social
  --> space injected successfully!!!
 
 * This call will generate for each user in the range [1000 - 1009] 10 spaces.. So 100 spaces will be created
+
 Each user in the range will be the owner (manager) of the space.
 
 *inject membership*
