@@ -926,7 +926,7 @@ We will describe how to use data injectors in eXo Poll
 
 
 |===
-|Parameter |Type |Description |Default value v
+|Parameter |Type |Description |Default value
 
 |number
 |mandatory
@@ -959,13 +959,13 @@ We will describe how to use data injectors in eXo Poll
 
 |pollType
 |mandatory
-|The type of the Poll (public | private)
+|The type of the Poll (public/private)
 |
 
 |groupPrefix
 |optional
 |Define the group prefix
- |"bench.group"
+|"bench.group"
 
 |pollPrefix
 |optional
