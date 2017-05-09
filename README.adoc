@@ -31,7 +31,7 @@ We will describe how to use data injectors in eXo Social
 *inject identity*
 
 |===
-|Parameter | Type | Description | Default
+|Parameter | Type | Description | Default value
 
 |number
 |mandatory
@@ -61,25 +61,35 @@ We will describe how to use data injectors in eXo Social
 *inject space*
 
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |fromUser
+|mandatory
 |The begin of the range
+|
 
 |toUser
+|mandatory
 |The end of the range
+|
 
 |number
+|mandatory
 |The amount of injected spaces for each user or space
+|
 
 |userPrefix
-|(optional) Define the user prefix. Default value is "bench.user"
+|optional
+|Define the user prefix
+|"bench.user"
 
 
 |spacePrefix
-|(optional) Define the space prefix. Default value is "bench.space"
-|===
+|optional
+|Define the space prefix
+|"bench.space"
 
+|===
 
   http://localhost:8080/rest/private/bench/inject/space?number=10&fromUser=1000&toUser=1009
 
@@ -90,30 +100,44 @@ Each user in the range will be the owner (manager) of the space.
 
 *inject membership*
 
-
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |type
-|must be set as 'member' or 'manager' (mandatory)
+|mandatory
+|must be set as 'member' or 'manager'
+|
 
 |fromUser
+|mandatory
 |The begin of the range
+|
 
 |toUser
+|mandatory
 |The end of the range
+|
+
 
 |userPrefix
-|(optional) Define the user prefix. Default value is "bench.user"
+|optional
+|Define the user prefix
+|"bench.user"
 
 |fromSpace
+|mandatory
 |The begin of the range
+|
 
 |toSpace
+|mandatory
 |The end of the range
+|
 
 |spacePrefix
-|(optional) Define the space prefix.Default value is "bench.space"
+|optional
+|Define the space prefix
+|"bench.space"
 
 |===
 
@@ -126,27 +150,39 @@ Each user in the range will be the owner (manager) of the space.
 
 *inject activity*
 
-
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |fromUser
+|mandatory
 |The begin of the range
+|
 
 |toUser
+|mandatory
 |The end of the range
+|
 
 |number
+|mandatory
 |The amount of injected activities for each user
+|
 
 |type
-|must be set as 'user' or 'space' (mandatory)
+|mandatory
+|must be set as 'user' or 'space'
+|
 
 |userPrefix
-|(optional) Define the user prefix. Default value is "bench.user"
+|optional
+|Define the user prefix
+|"bench.user"
 
 |spacePrefix
-|optional) Define the space prefix. Default value is "bench.space"
+|optional
+|Define the space prefix
+|"bench.space"
+
 |===
 
 
@@ -171,22 +207,32 @@ Each user in the range will be the owner (manager) of the space.
 
 
 |===
-|Parameter |Description
+|Parameter  |Type |Description |Default value
 
 |fromUser
+|mandatory
 |The begin of the range
+|
 
 |toUser
+|mandatory
 |The end of the range
+|
 
 |number
+|mandatory
 |The amount of injected activities for each user
+|
 
 |mentioner
-|must be set as remoteId who has been mentioned (mandatory)
+|mandatory
+|must be set as remoteId who has been mentioned
+|
 
 |userPrefix
-|(optional) Define the user prefix. Default value is "bench.user"
+|optional
+|Define the user prefix
+|"bench.user"
 
 |===
 
@@ -199,19 +245,27 @@ Each user in the range will be the owner (manager) of the space.
 
 
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |fromUser
+|mandatory
 |The begin of the range
+|
 
 |toUser
+|mandatory
 |The end of the range
+|
 
 |number
+|mandatory
 |The amount of injected relationships for each user
+|
 
 |prefix
-|(optional) Define the user prefix. Default value is "bench.user"
+|optional
+|Define the user prefix
+|"bench.user"
 
 |===
   http://localhost:8080/rest/private/bench/inject/relationship?number=19&fromUser=5100&toUser=5119&type=user
@@ -225,15 +279,18 @@ We will describe how to use data injectors in eXo Forum
 
 *inject profile*
 
-
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |number
+|mandatory
 |The amount of injected users
+|
 
 |prefix
-|(optional) Define the user prefix. Default value is "bench.user"
+|optional
+|Define the user prefix
+|"bench.user"
 |===
 
  http://localhost:8080/rest/private/bench/inject/forumProfile?number=100&prefix=abc.user
@@ -245,22 +302,32 @@ We will describe how to use data injectors in eXo Forum
 *inject category*
 
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |number
+|mandatory
 |The amount of injected categories for each user
+|
 
 |fromUser
+|mandatory
 |The begin of the range
+|
 
 |toUser
+|mandatory
 |The end of the range
+|
 
 |userPrefix
-|(optional) Define the user prefix. Default value is "bench.user"
+|optional
+|Define the user prefix
+| "bench.user"
 
 |catPrefix
-|(optional) Define the category prefix. Default value is "bench.cat"
+|optional
+|Define the category prefix
+|"bench.cat"
 
 |===
 
@@ -276,16 +343,24 @@ We will describe how to use data injectors in eXo Forum
 |Parameter |Description
 
 |number
-|The amount of injected forum for each category.
+|mandatory
+|The amount of injected forum for each category
+|
 
 |forumPrefix
-|(optional) Define the forum prefix. Default value is "bench.forum"
+|optional
+|Define the forum prefix
+|"bench.forum"
 
 |toCat
+|mandatory
 |Injected forum to category
+|
 
 |catPrefix
-|(optional) Define the category prefix. Default value is "bench.category"
+|optional
+|Define the category prefix
+|"bench.category"
 
 |===
 
@@ -302,25 +377,39 @@ We will describe how to use data injectors in eXo Forum
 |Parameter |Description
 
 |number
+|mandatory
 |The amount of injected topic own by each user in range into each forum in range
+|
 
 |topicPrefix
-|(optional) Define the topic prefix. Default value is "bench.topic"
+|optional
+|Define the topic prefix
+|"bench.topic"
 
 |fromUser
+|mandatory
 |The begin of the range
+|
 
 |toUser
+|mandatory
 |The end of the range
+|
 
 |userPrefix
-|(optional) Define the user prefix. Default value is "bench.user"
+|optional
+|Define the user prefix
+| "bench.user"
 
 |toForum
+|mandatory
 |Injected topic to forum
+|
 
 |forumPrefix
-|(optional) Define the forum prefix. Default value is "bench.forum"
+|optional
+|Define the forum prefix
+|"bench.forum"
 |===
 
  http://localhost:8080/rest/private/bench/inject/forumTopic?number=10&topicPrefix=abc.topic&fromUser=1000&toUser=1009&userPrefix=abc.user&toForum=19&forumPrefix=abc.forum
@@ -333,28 +422,42 @@ We will describe how to use data injectors in eXo Forum
 *inject post*
 
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |number
+|mandatory
 |The amount of injected post for each users in range into each topics
+|
 
 |postPrefix
-|(optional) Define the post prefix. Default value is "bench.post"
+|optional
+|Define the post prefix
+|"bench.post"
 
 |fromUser
+|mandatory
 |The begin of the range
+|
 
 |toUser
+|mandatory
 |The end of the range
+|
 
 |userPrefix
-|(optional) Define the user prefix. Default value is "bench.user"
+|optional
+|Define the user prefix
+|"bench.user"
 
 |toTopic
+|mandatory
 |Injected post to topic
+|
 
 |topicPrefix
-|(optional) Define the topic prefix. Default value is "bench.topic"
+|optional
+|Define the topic prefix
+|"bench.topic"
 |===
 
 
@@ -368,25 +471,38 @@ We will describe how to use data injectors in eXo Forum
 *inject membership*
 
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |type
-|must be set as 'category', 'forum', or 'topic' (mandatory)
+|mandatory
+|must be set as 'category', 'forum', or 'topic'
+|
 
 |toType
+|mandatory
 |Determines index of type for injection. ex: '5'
+|
 
 |typePrefix
+|mandatory
 |Define type of type prefix. ex: 'cat.forum' => for type is 'category'
+|
 
 |fromUser
+|mandatory
 |The begin of the range
+|
 
 |toUser
+|mandatory
 |The end of the range
+|
 
 |userPrefix
-|(optional) Define the user prefix. Default value is "bench.user"
+|optional
+|Define the user prefix
+|"bench.user"
+
 |===
 
  http://localhost:8080/rest/private/bench/inject/forumMembership?type=category&toType=5&typePrefix=abc.cat&fromUser=1000&toUser=1009&userPrefix=abc.user
@@ -398,22 +514,33 @@ We will describe how to use data injectors in eXo Forum
 *inject attachment*
 
 |===
-|Parameter |Description
+|Parameter |Type |Description  |Default value
 
 |number
+|mandatory
 |The amount of injected attachment for each posts in range
+|
 
 |postPrefix
-|(optional) Define the post prefix. Default value is "bench.post"
+|optional
+|Define the post prefix
+|"bench.post"
 
 |fromPost
- | The begin of the range
+|mandatory
+|The begin of the range
+|
 
 |toPost
+|mandatory
 |The end of the range
+|
 
 |byteSize
-|(optional) Define the size of attachment. Default value is 100 bytes
+|optional
+|Define the size of attachment
+| 100 bytes
+
 |===
 
 
@@ -427,53 +554,63 @@ We will describe how to use data injectors in eXo Forum
 === TASK Inject
 
 ==== Parameters
-Each parameter is optionnal because they all have a default value.
 
 
 |===
-|Parameter |Description |Default
+|Parameter |Type |Description |Default value
 
 |nbProject
+|optional
 |Number of project per user/space
 |15
 
 |nbTaskPerProject
+|optional
 |Number of tasks in a project
 |42
 
 |nbIncomingTask
+|optional
 |Number of tasks without project per user
 |10
 
 |nbTagPerTask
+|optional
 |Number of tags per task
 |2
 
 |nbComPerTask
+|optional
 |Number of comments per task
 |2
 
 |perCompleted
+|optional
 |Percentage of tasks completed
 |70
 
 |type
+|optional
 |Type of injecting: "user" or "space"
 |"user"
 
 |from
+|optional
 |The begin of the range
 |0
 
 |to
+|optional
 |The end of the range
 |10
 
 |prefix
+|optional
 |Define the user prefix
 |"bench.space" if type = "space", "bench.user" otherwise
 
 |suffix
+|optional
 |Define the user suffix (How many digit after prefix)
 |4
 |===
@@ -535,13 +672,18 @@ We will describe how to use data injectors in eXo FAQ
 *inject profile*
 
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |number
+|mandatory
 |The amount of injected users
+|
 
 |userPrefix
-|(optional) Define the user prefix. Default value is "bench.user".
+|optional
+|Define the user prefix
+|"bench.user"
+
 |===
 
  http://localhost:8080/rest/private/bench/inject/faqProfile?number=10&userPrefix=abc.user
@@ -552,15 +694,18 @@ We will describe how to use data injectors in eXo FAQ
 
 *inject category*
 
-
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |number
-|The amount of injected categories.
+|mandatory
+|The amount of injected categories
+|
 
 |catPrefix
-|(optional) Define the category prefix. Default value is "bench.cat".
+|optional
+|Define the category prefix
+|"bench.cat"
 |===
 
 
@@ -574,25 +719,38 @@ We will describe how to use data injectors in eXo FAQ
 *inject question*
 
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |number
-|The amount of injected questions for each category.
+|mandatory
+|The amount of injected questions for each category
+|
 
 |catPrefix
-|(optional) Define the category prefix. Default value is "bench.cat".
+|optional
+|Define the category prefix
+|"bench.cat"
 
 |toCat
-|The category which will be used to inject questions.
+|mandatory
+|The category which will be used to inject questions
+|
 
 |userPrefix
-|(optional) Define the user prefix. Default value is "bench.user".
+|optional
+|Define the user prefix
+| "bench.user"
 
 |toUser
-|The user who owns the injected question.
+|mandatory
+|The user who owns the injected question
+|
 
 |quesPrefix
-|(optional) Define the question prefix. Default value is "bench.ques"
+|optional
+|Define the question prefix
+| "bench.ques"
+
 |===
 
 
@@ -605,24 +763,33 @@ We will describe how to use data injectors in eXo FAQ
 
 *inject answer*
 
-
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |number
-|The amount of injected answers.
+|mandatory
+|The amount of injected answers
+|
 
 |fromQues
+|mandatory
 |The begin of the question range which injected answers are added to
+|
 
 |toQues
+|mandatory
 |The end of the question range which injected answers are added to
+|
 
 |quesPrefix
-|(optional) Define the question prefix. Default value is "bench.ques"
+|optional
+| Define the question prefix
+|"bench.ques"
 
 |answerPrefix
-|(optional) Define the answer prefix. Default value is "bench.answer"
+|optional
+ |Define the answer prefix
+ |"bench.answer"
 |===
 
 
@@ -635,22 +802,29 @@ We will describe how to use data injectors in eXo FAQ
 
 *inject comment*
 
-
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |number
+|mandatory
 |The amount of injected comments
+|
 
 |toQues
+|mandatory
 |The question which injected comments are added to
+|
 
 |quesPrefix
-|(optional) Define the question prefix. Default value is "bench.ques"
+|optional
+|Define the question prefix
+|"bench.ques"
 
 
 |commentPrefix
-|(optional) Define the comment prefix. Default value is "bench.comment"
+|optional
+|Define the comment prefix
+|"bench.comment"
 |===
 
 
@@ -664,22 +838,32 @@ We will describe how to use data injectors in eXo FAQ
 *inject attachment*
 
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |number
+|mandatory
 |The amount of injected attachments
+|
 
 |fromQues
+|mandatory
 |The begin of the question range which injected attachments are added to
+|
 
 |toQues
+|mandatory
 |The end of the question range which injected attachments are added to
+|
 
 |byteSize
-|The size in byte unit of each added attachment. (Range from 0 to 99)
+|mandatory
+|The size in byte unit of each added attachment
+|
 
 |quesPrefix
-|(optional) Define the question prefix. Default value is "bench.ques"
+|optional
+ |Define the question prefix
+ |"bench.ques"
 |===
 
 
@@ -692,29 +876,40 @@ We will describe how to use data injectors in eXo FAQ
 
 *inject Membership*
 
-
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |type
-|must be set as 'category', 'question', or 'answer' (mandatory)
+|mandatory
+|must be set as 'category', 'question', or 'answer'
+|
 
 |toType
+|mandatory
 |Determines index of type for injection. ex: '5'
+|
 
 |typePrefix
-|(optional) Define type of type prefix. ex: 'abc.cat' => for type is 'category'
+|optional
+|Define type of type prefix. ex: 'abc.cat' => for type is 'category'
+|
 
 |fromUser
+|mandatory
 |The begin of the user range
+|
 
 |toUser
+|mandatory
 |The end of the user range
+|
 
 |userPrefix
-|(optional) Define the user prefix. Default value is "bench.user"
-|===
+|optional
+|Define the user prefix
+|"bench.user"
 
+|===
 
    http://localhost:8080/rest/private/bench/inject/faqMembership?type=category&toType=0&typePrefix=abc.cat&fromUser=0&toUser=2&userPrefix=abc.user
 
@@ -731,13 +926,17 @@ We will describe how to use data injectors in eXo Poll
 
 
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value v
 
 |number
+|mandatory
 |The amount of injected groups
+|
 
 |prefix
-|(optional) Define the group prefix. Default value is "bench.group"
+|optional
+ |Define the group prefix
+ |"bench.group"
 |===
 
 
@@ -751,23 +950,33 @@ We will describe how to use data injectors in eXo Poll
 *inject poll*
 
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |number
+|mandatory
 |The amount of injected polls for the group
+|
 
 |pollType
+|mandatory
 |The type of the Poll (public | private)
-
+|
 
 |groupPrefix
-|(optional) Define the group prefix. Default value is "bench.group"
+|optional
+|Define the group prefix
+ |"bench.group"
 
 |pollPrefix
-|(optional) Define the poll prefix. Default value is "bench.poll"
+|optional
+|Define the poll prefix
+|"bench.poll"
 
 |toGroup
+|mandatory
 |The range of the group for injected polls
+|
+
 |===
 
   * *Public*
@@ -789,27 +998,38 @@ We will describe how to use data injectors in eXo Poll
 
 *inject vote*
 
-
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |fromPoll
+|mandatory
 |The range of the poll for start vote polls
+|
 
 |toPoll
+|mandatory
 |The range of the poll for end vote polls
+|
 
 |pollPrefix
-|(optional) Define the poll prefix. Default value is "bench.poll"
+|optional
+ |Define the poll prefix
+ |"bench.poll"
 
 |fromUser
-|The range of the user
+|mandatory
+|The begin of the user range
+|
 
 |toUser
-|The range of the user.
+|mandatory
+|The end of the user range
+|
 
 |userPrefix
-|(optional) Define the user prefix. Default value is "bench.user"
+|optional
+|Define the user prefix
+ |"bench.user"
 |===
 
 
