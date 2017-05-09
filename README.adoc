@@ -340,7 +340,7 @@ We will describe how to use data injectors in eXo Forum
 *inject forum*
 
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |number
 |mandatory
@@ -374,7 +374,7 @@ We will describe how to use data injectors in eXo Forum
 *inject topic*
 
 |===
-|Parameter |Description
+|Parameter |Type |Description |Default value
 
 |number
 |mandatory
