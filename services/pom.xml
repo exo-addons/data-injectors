@@ -10,8 +10,9 @@
   <packaging>jar</packaging>
   <name>Data Injectors - Services</name>
   <properties>
-    <task.version>1.3.x-SNAPSHOT</task.version>
-    <social.version>5.0.x-SNAPSHOT</social.version>
+    <task.addon.version>1.3.x-SNAPSHOT</task.addon.version>
+    <answers.addon.version>1.3.x-SNAPSHOT</answers.addon.version>
+    <itext.version>2.1.7</itext.version>
   </properties>
   <dependencies>
     <dependency>
@@ -62,33 +63,8 @@
     </dependency>
     <dependency>
       <groupId>org.exoplatform.addons.task</groupId>
-      <artifactId>task-management-injector</artifactId>
-      <version>${task.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.exoplatform.social</groupId>
-      <artifactId>social-extras-injection</artifactId>
-      <version>5.0.x-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.exoplatform.forum</groupId>
-      <artifactId>forum-extras-injection</artifactId>
-      <version>5.0.x-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.exoplatform.wiki</groupId>
-      <artifactId>wiki-injector</artifactId>
-      <version>5.0.x-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.exoplatform.ecms</groupId>
-      <artifactId>ecms-ext-data-injector</artifactId>
-      <version>5.0.x-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-    <groupId>org.exoplatform.addons.answers</groupId>
-    <artifactId>answers-data-injector</artifactId>
-    <version>1.3.x-SNAPSHOT</version>
+      <artifactId>task-management-services</artifactId>
+      <version>${task.addon.version}</version>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.ecms</groupId>
@@ -97,6 +73,24 @@
     <dependency>
       <groupId>org.exoplatform.ecms</groupId>
       <artifactId>ecms-core-publication</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.forum</groupId>
+      <artifactId>forum-forum-service</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.wiki</groupId>
+      <artifactId>wiki-service</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.addons.answers</groupId>
+      <artifactId>answers-services</artifactId>
+      <version>${answers.addon.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itext</artifactId>
+      <version>${itext.version}</version>
     </dependency>
   </dependencies>
   <build>
