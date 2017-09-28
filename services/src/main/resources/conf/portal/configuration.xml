@@ -22,6 +22,10 @@
     </component>
 
     <component>
+        <type>org.exoplatform.services.injection.commons.NotificationInjector</type>
+    </component>
+
+    <component>
         <type>org.exoplatform.services.injection.social.IdentityInjector</type>
     </component>
 
