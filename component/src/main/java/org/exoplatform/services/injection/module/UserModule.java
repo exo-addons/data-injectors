@@ -1,8 +1,9 @@
 package org.exoplatform.services.injection.module;
 
-import org.exoplatform.community.service.injector.InjectorUtils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
+import org.exoplatform.services.injection.AbstractInjector;
+import org.exoplatform.services.injection.InjectorUtils;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
@@ -16,6 +17,7 @@ import org.exoplatform.social.core.image.ImageUtils;
 import org.exoplatform.social.core.manager.IdentityManager;
 import org.exoplatform.social.core.manager.RelationshipManager;
 import org.exoplatform.social.core.model.AvatarAttachment;
+import org.exoplatform.social.core.relationship.model.Relationship;
 import org.exoplatform.webui.exception.MessageException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +26,7 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.Map;
 
-public class UserModule {
+public class UserModule extends AbstractInjector {
 
     /** The log. */
     private final Log           LOG                     = ExoLogger.getLogger(UserModule.class);
@@ -40,27 +42,13 @@ public class UserModule {
     /** The Constant WIDTH. */
     private final static int    WIDTH                   = 200;
 
-    private OrganizationService organizationService_;
-
-    private IdentityManager identityManager_;
-
-    private RelationshipManager relationshipManager_;
-
-    /**
-     * Instantiates a new user service.
-     */
-    public UserModule(OrganizationService organizationService, IdentityManager identityManager, RelationshipManager relationshipManager) {
-        organizationService_ = organizationService;
-        identityManager_ = identityManager;
-        relationshipManager_ = relationshipManager;
-    }
-
     /**
      * Creates the users.
      *
      * @param users the users
+     * @param defaultFolderPath
      */
-    public void createUsers(JSONArray users) {
+    public void createUsers(JSONArray users, String defaultFolderPath) {
 
         for (int i = 0; i < users.length(); i++) {
             try {
@@ -74,7 +62,7 @@ public class UserModule {
                         user.getString("password"),
                         user.getString("isadmin"));
                 if (created) {
-                    saveUserAvatar(user.getString("username"), user.getString("avatar"));
+                    saveUserAvatar(user.getString("username"), user.getString("avatar"), defaultFolderPath);
                 }
                 endRequest();
 
@@ -109,7 +97,7 @@ public class UserModule {
 
         User user = null;
         try {
-            user = organizationService_.getUserHandler().findUserByName(username);
+            user = organizationService.getUserHandler().findUserByName(username);
         } catch (Exception e) {
             LOG.info(e.getMessage());
         }
@@ -118,7 +106,7 @@ public class UserModule {
             return false;
         }
 
-        user = organizationService_.getUserHandler().createUserInstance(username);
+        user = organizationService.getUserHandler().createUserInstance(username);
         user.setDisplayName(firstname + " " + lastname);
         user.setEmail(email);
         user.setFirstName(firstname);
@@ -126,7 +114,7 @@ public class UserModule {
         user.setPassword(password);
 
         try {
-            organizationService_.getUserHandler().createUser(user, true);
+            organizationService.getUserHandler().createUser(user, true);
         } catch (Exception e) {
             LOG.info(e.getMessage());
             ok = false;
@@ -135,10 +123,10 @@ public class UserModule {
         if (isAdmin != null && isAdmin.equals("true")) {
             // Assign the membership "*:/platform/administrators" to the created user
             try {
-                Group group = organizationService_.getGroupHandler().findGroupById(PLATFORM_USERS_GROUP);
-                MembershipType membershipType = organizationService_.getMembershipTypeHandler()
+                Group group = organizationService.getGroupHandler().findGroupById(PLATFORM_USERS_GROUP);
+                MembershipType membershipType = organizationService.getMembershipTypeHandler()
                         .findMembershipType(MEMBERSHIP_TYPE_MANAGER);
-                organizationService_.getMembershipHandler().linkMembership(user, group, membershipType, true);
+                organizationService.getMembershipHandler().linkMembership(user, group, membershipType, true);
             } catch (Exception e) {
                 LOG.warn("Can not assign *:/platform/administrators membership to the created user");
                 ok = false;
@@ -147,13 +135,13 @@ public class UserModule {
         }
 
         if (!"".equals(position)) {
-            Identity identity = identityManager_.getOrCreateIdentity(OrganizationIdentityProvider.NAME, username, true);
+            Identity identity = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, username, true);
             if (identity != null) {
                 Profile profile = identity.getProfile();
                 profile.setProperty(Profile.POSITION, position);
                 profile.setListUpdateTypes(Arrays.asList(Profile.UpdateType.CONTACT));
                 try {
-                    identityManager_.updateProfile(profile);
+                    identityManager.updateProfile(profile);
                 } catch (MessageException e) {
                     e.printStackTrace();
                 }
@@ -168,12 +156,13 @@ public class UserModule {
      *
      * @param username the username
      * @param fileName the file name
+     * @param defaultFolder the data folder path
      */
-    private void saveUserAvatar(String username, String fileName) {
+    private void saveUserAvatar(String username, String fileName, String defaultFolder) {
         try {
 
-            AvatarAttachment avatarAttachment = InjectorUtils.getAvatarAttachment(fileName);
-            Profile p =identityManager_.getOrCreateIdentity(OrganizationIdentityProvider.NAME, username, true).getProfile();
+            AvatarAttachment avatarAttachment = InjectorUtils.getAvatarAttachment(fileName, defaultFolder);
+            Profile p =identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, username, true).getProfile();
             p.setProperty(Profile.AVATAR, avatarAttachment);
             p.setListUpdateTypes(Arrays.asList(Profile.UpdateType.AVATAR));
 
@@ -187,7 +176,7 @@ public class UserModule {
                 }
             }
 
-            identityManager_.updateProfile(p);
+            identityManager.updateProfile(p);
 
         } catch (Exception e) {
             LOG.info(e.getMessage());
@@ -204,11 +193,11 @@ public class UserModule {
 
             try {
                 JSONObject relation = relations.getJSONObject(i);
-                Identity idInviting = identityManager_.getOrCreateIdentity(OrganizationIdentityProvider.NAME,relation.getString("inviting"),false);
-                Identity idInvited = identityManager_.getOrCreateIdentity(OrganizationIdentityProvider.NAME,relation.getString("invited"),false);
-                relationshipManager_.inviteToConnect(idInviting, idInvited);
+                Identity idInviting = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME,relation.getString("inviting"),false);
+                Identity idInvited = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME,relation.getString("invited"),false);
+                relationshipManager.inviteToConnect(idInviting, idInvited);
                 if (relation.has("confirmed") && relation.getBoolean("confirmed")) {
-                    relationshipManager_.confirm(idInvited, idInviting);
+                    relationshipManager.confirm(idInvited, idInviting);
                 }
             } catch (JSONException e) {
                 LOG.error("Syntax error on relation n°" + i, e);
@@ -217,9 +206,9 @@ public class UserModule {
     }
 
     private void endRequest() {
-        if (requestStarted && organizationService_ instanceof ComponentRequestLifecycle) {
+        if (requestStarted && organizationService instanceof ComponentRequestLifecycle) {
             try {
-                ((ComponentRequestLifecycle) organizationService_).endRequest(PortalContainer.getInstance());
+                ((ComponentRequestLifecycle) organizationService).endRequest(PortalContainer.getInstance());
             } catch (Exception e) {
                 LOG.warn(e.getMessage(), e);
             }
@@ -228,9 +217,68 @@ public class UserModule {
     }
 
     private void startRequest() {
-        if (organizationService_ instanceof ComponentRequestLifecycle) {
-            ((ComponentRequestLifecycle) organizationService_).startRequest(PortalContainer.getInstance());
+        if (organizationService instanceof ComponentRequestLifecycle) {
+            ((ComponentRequestLifecycle) organizationService).startRequest(PortalContainer.getInstance());
             requestStarted = true;
         }
+    }
+
+    public void purgeUsers(JSONArray users) {
+        for (int i = 0; i < users.length(); i++) {
+            try {
+                startRequest();
+                JSONObject user = users.getJSONObject(i);
+                purgeUser(user.getString("username"));
+
+                endRequest();
+
+
+            } catch (JSONException e) {
+                LOG.error("Syntax error on user n°" + i, e);
+            }
+
+        }
+    }
+
+    private void purgeUser(String username) {
+
+
+        User user = null;
+        try {
+            user = organizationService.getUserHandler().findUserByName(username);
+        } catch (Exception e) {
+            LOG.info("User {} doesn't exist in eXo store", username);
+        }
+
+        if (user != null) {
+            try {
+                organizationService.getUserHandler().removeUser(username,true);
+
+            } catch (Exception e) {
+                LOG.warn("Enable to drop User {} from eXo store", username);
+
+            }
+
+
+        }
+    }
+
+    public void purgeRelations(JSONArray relations) {
+        for (int i = 0; i < relations.length(); i++) {
+
+            try {
+                JSONObject relation = relations.getJSONObject(i);
+                Identity idInviting = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME,relation.getString("inviting"),false);
+                Identity idInvited = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME,relation.getString("invited"),false);
+
+                Relationship oldRelationShip = relationshipManager.get(idInviting, idInvited);
+                if (oldRelationShip != null) {
+                    relationshipManager.delete(oldRelationShip);
+                }
+            } catch (JSONException e) {
+                LOG.error("Syntax error on relation n°" + i, e);
+            }
+        }
+
     }
 }

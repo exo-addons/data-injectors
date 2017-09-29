@@ -7,6 +7,7 @@ import org.exoplatform.forum.common.jcr.PropertyReader;
 import org.exoplatform.forum.service.*;
 import org.exoplatform.forum.service.filter.model.ForumFilter;
 import org.exoplatform.forum.service.impl.model.PostFilter;
+import org.exoplatform.services.injection.AbstractInjector;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.json.JSONArray;
@@ -18,21 +19,9 @@ import javax.jcr.NodeIterator;
 import java.util.Date;
 import java.util.List;
 
-public class ForumModule {
+public class ForumModule extends AbstractInjector {
     /** The log. */
     private final Log                          LOG = ExoLogger.getLogger(ForumModule.class);
-
-
-    private ForumService forumService_;
-
-    private KSDataLocation ksDataLocation_;
-    /**
-     * Instantiates a new forum service.
-     */
-    public ForumModule(ForumService forumService, KSDataLocation ksDataLocation) {
-        forumService_= forumService;
-        ksDataLocation_ = ksDataLocation;
-    }
 
     /**
      * Creates the forum contents.
@@ -65,7 +54,7 @@ public class ForumModule {
 
         String owner = categoryJSON.getString("owner");
 
-        List<Category> categories = forumService_.getCategories();
+        List<Category> categories = forumService.getCategories();
         String categoryId = "";
         for (Category category : categories) {
             if (category.getCategoryName().equals(title)) {
@@ -79,7 +68,7 @@ public class ForumModule {
             category.setDescription(description);
             category.setOwner(owner);
             try {
-                forumService_.saveCategory(category, true);
+                forumService.saveCategory(category, true);
                 categoryId = category.getId();
 
             } catch (Exception e) {
@@ -116,7 +105,7 @@ public class ForumModule {
         String owner = forumJSON.getString("owner");
 
         ForumFilter filter = new ForumFilter(categoryId, true);
-        List<Forum> forums = forumService_.getForums(filter);
+        List<Forum> forums = forumService.getForums(filter);
 
         String forumId = "";
         for (Forum forum : forums) {
@@ -132,7 +121,7 @@ public class ForumModule {
             forum.setOwner(owner);
 
             try {
-                forumService_.saveForum(categoryId, forum, true);
+                forumService.saveForum(categoryId, forum, true);
                 forumId = forum.getId();
 
             } catch (Exception e) {
@@ -170,7 +159,7 @@ public class ForumModule {
         String owner = topicJSON.getString("owner");
 
         try {
-            List<Topic> topics = forumService_.getTopics(categoryId, forumId);
+            List<Topic> topics = forumService.getTopics(categoryId, forumId);
             String topicId = "";
             for (Topic topic : topics) {
                 if (topic.getTopicName().equals(title)) {
@@ -188,7 +177,7 @@ public class ForumModule {
                 topic.setIcon("classNameIcon");
 
                 try {
-                    forumService_.saveTopic(categoryId, forumId, topic, true, false, new MessageBuilder());
+                    forumService.saveTopic(categoryId, forumId, topic, true, false, new MessageBuilder());
                     topicId = topic.getId();
 
                 } catch (Exception e) {
@@ -236,7 +225,7 @@ public class ForumModule {
         try {
 
             PostFilter postFilter = new PostFilter(categoryId, forumId, topicId, null, null, null, null);
-            ListAccess<Post> posts = forumService_.getPosts(postFilter);
+            ListAccess<Post> posts = forumService.getPosts(postFilter);
             Post[] postArray = posts.load(0, posts.getSize());
             String postId = "";
             for (Post post : postArray) {
@@ -252,7 +241,7 @@ public class ForumModule {
                 newPost.setMessage(content);
                 newPost.setName(topicTitle);
 
-                forumService_.savePost(categoryId, forumId, topicId, newPost, true, new MessageBuilder());
+                forumService.savePost(categoryId, forumId, topicId, newPost, true, new MessageBuilder());
             }
 
         } catch (Exception e) {
@@ -272,7 +261,7 @@ public class ForumModule {
             Forum forum = getForumByName(forumName);
             Category cat = getCategoryByForumName(forumName);
 
-            List<Topic> topics = forumService_.getTopics(cat.getId(), forum.getId());
+            List<Topic> topics = forumService.getTopics(cat.getId(), forum.getId());
             if (topics.size() > 0)
                 return;
 
@@ -298,7 +287,7 @@ public class ForumModule {
             topicNew.setCanView(new String[] {});
             topicNew.setCanPost(new String[] {});
 
-            forumService_.saveTopic(cat.getId(), forum.getId(), topicNew, true, false, new MessageBuilder());
+            forumService.saveTopic(cat.getId(), forum.getId(), topicNew, true, false, new MessageBuilder());
         } catch (Exception e) {
         }
     }
@@ -355,10 +344,10 @@ public class ForumModule {
    */
     private Forum getForumByName(String forumName) throws Exception {
         StringBuffer sb = new StringBuffer(Utils.JCR_ROOT);
-        sb.append("/").append(ksDataLocation_.getForumCategoriesLocation()).append("//element(*,");
+        sb.append("/").append(ksDataLocation.getForumCategoriesLocation()).append("//element(*,");
         sb.append(Utils.EXO_FORUM).append(")[jcr:like(exo:name, '%").append(forumName).append("%')]");
 
-        NodeIterator iter = forumService_.search(sb.toString());
+        NodeIterator iter = forumService.search(sb.toString());
         if (iter.hasNext()) {
             Node forumNode = (Node) iter.next();
 
@@ -385,10 +374,10 @@ public class ForumModule {
      */
     private Category getCategoryByForumName(String forumName) throws Exception {
         StringBuffer sb = new StringBuffer(Utils.JCR_ROOT);
-        sb.append("/").append(ksDataLocation_.getForumCategoriesLocation()).append("//element(*,");
+        sb.append("/").append(ksDataLocation.getForumCategoriesLocation()).append("//element(*,");
         sb.append(Utils.EXO_FORUM).append(")[jcr:like(exo:name, '%").append(forumName).append("%')]");
 
-        NodeIterator iter = forumService_.search(sb.toString());
+        NodeIterator iter = forumService.search(sb.toString());
         if (iter.hasNext()) {
             Node forumNode = (Node) iter.next();
             if (forumNode.getParent() != null) {

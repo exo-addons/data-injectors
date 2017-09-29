@@ -12,6 +12,7 @@
   <packaging>pom</packaging>
   <name>Data Injectors - Addon</name>
   <modules>
+    <module>component</module>
     <module>services</module>
     <module>packaging</module>
   </modules>

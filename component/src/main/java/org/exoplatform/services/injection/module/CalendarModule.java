@@ -3,13 +3,15 @@ package org.exoplatform.services.injection.module;
 
 import org.exoplatform.calendar.model.Calendar;
 import org.exoplatform.calendar.model.Event;
-import org.exoplatform.calendar.service.*;
-import org.exoplatform.commons.utils.CommonsUtils;
-import org.exoplatform.community.service.injector.InjectorUtils;
+import org.exoplatform.calendar.service.CalendarEvent;
+import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.services.injection.AbstractInjector;
+import org.exoplatform.services.injection.InjectorUtils;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
-import org.exoplatform.services.organization.OrganizationService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,33 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CalendarModule {
-
-    /**
-     * The organization service.
-     */
-    private OrganizationService organizationService_;
-
-    private CalendarService calendarService_;
-
-    /**
-     * The Calendar Handler
-     */
-    org.exoplatform.calendar.service.ExtendedCalendarService calendarHandler_;
+public class CalendarModule extends AbstractInjector {
 
     /**
      * The log.
      */
     private final Log LOG = ExoLogger.getLogger(CalendarModule.class);
-
-    /**
-     * Instantiates a new calendar service.
-     */
-    public CalendarModule(CalendarService calendarService, OrganizationService organizationService, ExtendedCalendarService extendedCalendarService) {
-        calendarService_ = calendarService;
-        organizationService_ = organizationService;
-        calendarHandler_ = extendedCalendarService;
-    }
 
     /**
      * Sets the calendar colors.
@@ -67,26 +48,26 @@ public class CalendarModule {
                 try {
                     String[] calendarIdList = getCalendarsIdList(username);
                     for (String calId : calendarIdList) {
-                        Calendar calendar = calendarHandler_.getCalendarHandler().getCalendarById(calId);
+                        Calendar calendar = extendedCalendarService.getCalendarHandler().getCalendarById(calId);
                         String calName = calendar.getName();
                         if (map.containsKey(calName)) {
                             JSONObject calTemp = map.get(calName);
                             calendar.setCalendarColor(calTemp.getString("color"));
                             calendar.setCalendarOwner(username);
                             if (calTemp.has("type") && calTemp.getString("type").equals("user")) {
-                                calendarHandler_.getCalendarHandler().saveCalendar(calendar);
+                                extendedCalendarService.getCalendarHandler().saveCalendar(calendar);
                             } else {
                                 //--calendarService_.savePublicCalendar(calendar, false);
-                                calendarHandler_.getCalendarHandler().saveCalendar(calendar);
+                                extendedCalendarService.getCalendarHandler().saveCalendar(calendar);
                             }
                         } else {
                             filtered = calendar.getId();
                         }
                     }
                     if (filtered != null) {
-                        CalendarSetting setting = calendarService_.getCalendarSetting(username);
+                        CalendarSetting setting = calendarService.getCalendarSetting(username);
                         setting.setFilterPublicCalendars(new String[]{filtered});
-                        calendarService_.saveCalendarSetting(username, setting);
+                        calendarService.saveCalendarSetting(username, setting);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -174,9 +155,9 @@ public class CalendarModule {
         calendar.set(java.util.Calendar.MINUTE, toMin);
         event.setToDateTime(calendar.getTime());
         if (isUserEvent)
-            calendarService_.saveUserEvent(username, calId, event, true);
+            calendarService.saveUserEvent(username, calId, event, true);
         else
-            calendarService_.savePublicEvent(calId, event, true);
+            calendarService.savePublicEvent(calId, event, true);
 
     }
 
@@ -190,9 +171,9 @@ public class CalendarModule {
         List<CalendarEvent> events = getEvents(username);
         for (CalendarEvent event : events) {
             if (event.isPrivate()) {
-                calendarService_.removeUserEvent(username, event.getCalendarId(), event.getId());
+                calendarService.removeUserEvent(username, event.getCalendarId(), event.getId());
             } else {
-                calendarService_.removePublicEvent(event.getCalendarId(), event.getId());
+                calendarService.removePublicEvent(event.getCalendarId(), event.getId());
             }
         }
     }
@@ -209,7 +190,7 @@ public class CalendarModule {
         for (String calId : calendarIdList) {
             Calendar calendar = null;
             try {
-                calendar = calendarService_.getCalendarById(calId);
+                calendar = calendarService.getCalendarById(calId);
                 String calName = calendar.getName();
                 map.put(calName, calId);
             } catch (Exception e) {
@@ -229,8 +210,8 @@ public class CalendarModule {
         List<GroupCalendarData> listgroupCalendar = null;
         List<org.exoplatform.calendar.service.Calendar> listUserCalendar = null;
         try {
-            listgroupCalendar = calendarService_.getGroupCalendars(getUserGroups(username), true, username);
-            listUserCalendar = calendarService_.getUserCalendars(username, true);
+            listgroupCalendar = calendarService.getGroupCalendars(getUserGroups(username), true, username);
+            listUserCalendar = calendarService.getUserCalendars(username, true);
         } catch (Exception e) {
             LOG.info("Error while checking User Calendar :" + e.getMessage());
         }
@@ -263,7 +244,7 @@ public class CalendarModule {
         eventQuery.setCalendarId(calList);
         List<CalendarEvent> userEvents = null;
         try {
-            userEvents = calendarService_.getEvents(username, eventQuery, calList);
+            userEvents = calendarService.getEvents(username, eventQuery, calList);
 
         } catch (Exception e) {
             LOG.info("Error while checking User Events:" + e.getMessage());
@@ -280,7 +261,7 @@ public class CalendarModule {
      */
     private String[] getUserGroups(String username) throws Exception {
 
-        Object[] objs = organizationService_.getGroupHandler().findGroupsOfUser(username).toArray();
+        Object[] objs = organizationService.getGroupHandler().findGroupsOfUser(username).toArray();
         String[] groups = new String[objs.length];
         for (int i = 0; i < objs.length; i++) {
             groups[i] = ((Group) objs[i]).getId();

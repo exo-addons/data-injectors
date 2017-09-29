@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.exoplatform.org/xml/ns/kernel_1_2.xsd http://www.exoplatform.org/xml/ns/kernel_1_2.xsd"
+               xmlns="http://www.exoplatform.org/xml/ns/kernel_1_2.xsd">
+
+    <component>
+        <type>org.exoplatform.services.injection.module.ActivityModule</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.module.CalendarModule</type>
+    </component>
+    <component>
+        <type>org.exoplatform.services.injection.module.DocumentModule</type>
+    </component>
+    <component>
+        <type>org.exoplatform.services.injection.module.ForumModule</type>
+    </component>
+    <component>
+        <type>org.exoplatform.services.injection.module.SpaceModule</type>
+    </component>
+    <component>
+        <type>org.exoplatform.services.injection.module.UserModule</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.module.WikiModule</type>
+    </component>
+    <component>
+        <key>org.exoplatform.services.injection.DataInjector</key>
+        <type>org.exoplatform.services.injection.impl.DataInjectorImpl</type>
+        <init-params>
+            <value-param>
+                <name>data-injection-folder-path</name>
+                <value>${exo.datat.injection.folder.path:data}</value>
+            </value-param>
+        </init-params>
+    </component>
+    <component>
+        <type>org.exoplatform.services.injection.ws.DataInjectorREST</type>
+    </component>
+
+    <!--
+    <external-component-plugins>
+        <target-component>org.exoplatform.services.scheduler.JobSchedulerService</target-component>
+        <component-plugin profiles="all">
+            <name>TribeDataInjectionInBulk</name>
+            <set-method>addCronJob</set-method>
+            <type>org.exoplatform.services.scheduler.CronJob</type>
+            <description>Init job for data injection to eXo Tribe</description>
+            <init-params>
+                <properties-param>
+                    <name>cronjob.info</name>
+                    <description>Configuration parameter of Job execution to inject Data</description>
+                    <property name="jobName" value="TribeDataInjectionJob"/>
+                    <property name="groupName" value="TribeCron"/>
+                    <property name="job" value="org.exoplatform.community.service.injector.sceduler.TribeDataInjectorJob"/>
+                    <property name="expression" value="${exo.tribe.onboarding.DataInjectionJob.expression:* */20 * * * ?}"/>
+                </properties-param>
+            </init-params>
+        </component-plugin>
+    </external-component-plugins>
+    -->
+
+</configuration>

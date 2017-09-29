@@ -1,7 +1,9 @@
 package org.exoplatform.services.injection.module;
 
+import org.exoplatform.services.injection.AbstractInjector;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.social.common.RealtimeListAccess;
 import org.exoplatform.social.core.activity.model.ExoSocialActivity;
 import org.exoplatform.social.core.activity.model.ExoSocialActivityImpl;
 import org.exoplatform.social.core.identity.model.Identity;
@@ -11,7 +13,10 @@ import org.exoplatform.social.core.manager.IdentityManager;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-public class ActivityModule {
+
+import java.util.List;
+
+public class ActivityModule extends AbstractInjector {
     /** The log. */
     private final Log LOG = ExoLogger.getLogger(ActivityModule.class);
 
@@ -99,4 +104,26 @@ public class ActivityModule {
         }
 
     }
+
+    private void deleteActivity(JSONObject activityJSON) throws Exception {
+        //---
+        RealtimeListAccess<ExoSocialActivity> listAccess = null;
+        List<ExoSocialActivity> activities = null;
+        //--- Get all activities pushed by a user
+        String from = activityJSON.getString("from");
+        Identity identity = identityManager_.getOrCreateIdentity(OrganizationIdentityProvider.NAME, from, false);
+
+        RealtimeListAccess<ExoSocialActivity>  allActivities = activityManager_.getActivityFeedWithListAccess(identity);
+
+        //TODO : load activities by fixed bulk
+        //--- Load All Activities
+        activities = allActivities.loadAsList(0,allActivities.getSize());
+
+        //--- Drop activity one by one
+        activities.forEach((a) -> {
+            activityManager_.deleteActivity(a);
+        });
+
+    }
+
 }

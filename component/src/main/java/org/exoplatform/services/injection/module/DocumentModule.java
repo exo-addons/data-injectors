@@ -1,16 +1,11 @@
 package org.exoplatform.services.injection.module;
 
-import org.exoplatform.commons.utils.CommonsUtils;
-import org.exoplatform.community.service.injector.InjectorUtils;
-import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.services.jcr.ext.app.SessionProviderService;
+import org.exoplatform.services.injection.AbstractInjector;
+import org.exoplatform.services.injection.InjectorUtils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.services.listener.ListenerService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Membership;
-import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.MembershipEntry;
@@ -25,40 +20,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 
-public class DocumentModule {
+public class DocumentModule extends AbstractInjector {
     /** The log. */
     private final Log      LOG                   = ExoLogger.getLogger(DocumentModule.class);
 
     /** The file created activity. */
     public static String   FILE_CREATED_ACTIVITY = "ActivityNotify.event.FileCreated";
 
-    private RepositoryService repositoryService_;
-
-    private SessionProviderService sessionProviderService_;
-
-    private OrganizationService organizationService_;
-
-    private ListenerService listenerService_;
-
-    private NodeHierarchyCreator nodeHierarchyCreator_;
-
-    /**
-     * Instantiates a new document service.
-     */
-    public DocumentModule(RepositoryService repositoryService, SessionProviderService sessionProviderService, OrganizationService organizationService,ListenerService listenerService, NodeHierarchyCreator nodeHierarchyCreator) {
-        repositoryService_ = repositoryService;
-        sessionProviderService_ = sessionProviderService;
-        organizationService_ = organizationService;
-        listenerService_ = listenerService;
-        nodeHierarchyCreator_ = nodeHierarchyCreator;
-    }
-
     /**
      * Upload documents.
      *
      * @param documents the documents
+     * @param defaultDataFolderPath the documents
      */
-    public void uploadDocuments(JSONArray documents) {
+    public void uploadDocuments(JSONArray documents, String defaultDataFolderPath) {
         for (int i = 0; i < documents.length(); i++) {
             try {
                 JSONObject document = documents.getJSONObject(i);
@@ -67,7 +42,7 @@ public class DocumentModule {
                 String path = document.has("path") ? document.getString("path") : null;
                 boolean isPrivate = document.getBoolean("isPrivate");
                 String spaceName = document.has("spaceName") ? document.getString("spaceName") : "";
-                storeFile(filename, spaceName, isPrivate, null, owner, path, "collaboration", "documents");
+                storeFile(filename, spaceName, isPrivate, null, owner, path, "collaboration", "documents", defaultDataFolderPath);
                 // createOrEditPage(wiki, wiki.has("parent") ? wiki.getString("parent") : "");
             } catch (JSONException e) {
                 LOG.error("Syntax error on document n°" + i, e);
@@ -87,6 +62,7 @@ public class DocumentModule {
      * @param path the path
      * @param workspace the workspace
      * @param fileType the file type
+     * @param dataFolderPath the data folder path
      */
     protected void storeFile(String filename,
                              String name,
@@ -95,7 +71,8 @@ public class DocumentModule {
                              String username,
                              String path,
                              String workspace,
-                             String fileType) {
+                             String fileType,
+                                String dataFolderPath) {
         SessionProvider sessionProvider = null;
         if (!"root".equals(username)) {
             sessionProvider = startSessionAs(username);
@@ -105,12 +82,12 @@ public class DocumentModule {
 
         try {
             // get info
-            Session session = sessionProvider.getSession(workspace, repositoryService_.getCurrentRepository());
+            Session session = sessionProvider.getSession(workspace, repositoryService.getCurrentRepository());
 
             Node homeNode;
 
             if (isPrivateContext) {
-                Node userNode = nodeHierarchyCreator_.getUserNode(sessionProvider, username);
+                Node userNode = nodeHierarchyCreator.getUserNode(sessionProvider, username);
                 homeNode = userNode.getNode("Private");
             } else {
                 Node rootNode = session.getRootNode();
@@ -127,7 +104,7 @@ public class DocumentModule {
             if (!docNode.hasNode(filename) && (uuid == null || "---".equals(uuid))) {
                 Node fileNode = docNode.addNode(filename, "nt:file");
                 Node jcrContent = fileNode.addNode("jcr:content", "nt:resource");
-                InputStream inputStream = InjectorUtils.getFile(filename, fileType);
+                InputStream inputStream = InjectorUtils.getFile(filename, fileType,dataFolderPath);
                 jcrContent.setProperty("jcr:data", inputStream);
                 jcrContent.setProperty("jcr:lastModified", Calendar.getInstance());
                 jcrContent.setProperty("jcr:encoding", "UTF-8");
@@ -164,7 +141,7 @@ public class DocumentModule {
                 }
                 session.save();
                 if (!"root".equals(username)) {
-                    listenerService_.broadcast(FILE_CREATED_ACTIVITY, null, fileNode);
+                    listenerService.broadcast(FILE_CREATED_ACTIVITY, null, fileNode);
                 }
 
             }
@@ -187,6 +164,7 @@ public class DocumentModule {
      * @param workspace the workspace
      * @param type the type
      * @param fileType the file type
+     * @param dataFolderPath the data folder path type
      */
     protected void storeVideos(String filename,
                                String name,
@@ -196,13 +174,14 @@ public class DocumentModule {
                                String path,
                                String workspace,
                                String type,
-                               String fileType) {
+                               String fileType,
+                               String dataFolderPath) {
 
         SessionProvider sessionProvider = startSessionAs(username);
 
         try {
             // get info
-            Session session = sessionProvider.getSession(workspace, repositoryService_.getCurrentRepository());
+            Session session = sessionProvider.getSession(workspace, repositoryService.getCurrentRepository());
 
             Node homeNode;
 
@@ -215,7 +194,7 @@ public class DocumentModule {
             if (!docNode.hasNode(filename) && (uuid == null || "---".equals(uuid))) {
                 Node fileNode = docNode.addNode(filename, "nt:file");
                 Node jcrContent = fileNode.addNode("jcr:content", "nt:resource");
-                InputStream inputStream = InjectorUtils.getFile(filename, fileType);
+                InputStream inputStream = InjectorUtils.getFile(filename, fileType,dataFolderPath);
                 jcrContent.setProperty("jcr:data", inputStream);
                 jcrContent.setProperty("jcr:lastModified", Calendar.getInstance());
                 jcrContent.setProperty("jcr:encoding", "UTF-8");
@@ -224,7 +203,7 @@ public class DocumentModule {
                 }
                 session.save();
                 if (!"root".equals(name)) {
-                    listenerService_.broadcast(FILE_CREATED_ACTIVITY, null, fileNode);
+                    listenerService.broadcast(FILE_CREATED_ACTIVITY, null, fileNode);
                 }
 
             }
@@ -257,7 +236,7 @@ public class DocumentModule {
         try {
             Collection<MembershipEntry> membershipEntries = new ArrayList<MembershipEntry>();
 
-            Collection<Membership> memberships = organizationService_.getMembershipHandler().findMembershipsByUser(user);
+            Collection<Membership> memberships = organizationService.getMembershipHandler().findMembershipsByUser(user);
             for (Membership membership : memberships) {
                 membershipEntries.add(new MembershipEntry(membership.getGroupId(), membership.getMembershipType()));
             }
@@ -267,15 +246,15 @@ public class DocumentModule {
         }
         ConversationState state = new ConversationState(identity);
         ConversationState.setCurrent(state);
-        sessionProviderService_.setSessionProvider(null, new SessionProvider(state));
-        return sessionProviderService_.getSessionProvider(null);
+        sessionProviderService.setSessionProvider(null, new SessionProvider(state));
+        return sessionProviderService.getSessionProvider(null);
     }
 
     /**
      * End session.
      */
     protected void endSession() {
-        sessionProviderService_.removeSessionProvider(null);
+        sessionProviderService.removeSessionProvider(null);
         ConversationState.setCurrent(null);
     }
 
@@ -283,11 +262,12 @@ public class DocumentModule {
      * Store script.
      *
      * @param scriptData the script data
+     * @param dataFolderPath  the data folder path
      * @return the string
      */
-    public String storeScript(String scriptData) {
+    public String storeScript(String scriptData, String dataFolderPath) {
         removeFileIfExists(scriptData, "root", "/Application Data", "collaboration");
-        storeFile(scriptData, scriptData, true, null, "root", "/Application Data", "collaboration", "scriptData");
+        storeFile(scriptData, scriptData, true, null, "root", "/Application Data", "collaboration", "scriptData",dataFolderPath);
         return ("/rest/jcr/repository/collaboration/Application Data/" + scriptData);
 
     }
@@ -309,7 +289,7 @@ public class DocumentModule {
         }
 
         try {
-            Session session = sessionProvider.getSession(workspace, repositoryService_.getCurrentRepository());
+            Session session = sessionProvider.getSession(workspace, repositoryService.getCurrentRepository());
 
             Node docNode;
             if (path != null) {
