@@ -16,12 +16,10 @@ import javax.ws.rs.ext.RuntimeDelegate;
 public class DataInjectorREST implements ResourceContainer {
     private static final Log log = ExoLogger.getLogger(DataInjectorREST.class);
 
-    private static final CacheControl cacheControl_;
     private DataInjector dataInjector;
 
+    private static final CacheControl cacheControl_ = new CacheControl();
     static {
-        RuntimeDelegate.setInstance(new RuntimeDelegateImpl());
-        cacheControl_ = new CacheControl();
         cacheControl_.setNoCache(true);
         cacheControl_.setNoStore(true);
     }
@@ -41,9 +39,14 @@ public class DataInjectorREST implements ResourceContainer {
 
         } catch (Exception e) {
             log.error("Data Injection Failed", e);
-            return Response.ok("Errors happens, can not inject fake data as expected " , MediaType.APPLICATION_JSON).cacheControl(cacheControl_).build();
+            return Response.serverError()
+                    .entity(String.format("Data injection failed due to %1$s",e.getMessage()))
+                    .build();
         }
-        return Response.ok("Data has been injected successfully" , MediaType.APPLICATION_JSON).cacheControl(cacheControl_).build();
+        return Response.ok(String.format("Data has been injected successfully!!!"),
+                MediaType.TEXT_PLAIN)
+                .cacheControl(cacheControl_)
+                .build();
     }
 
     @GET
@@ -56,8 +59,13 @@ public class DataInjectorREST implements ResourceContainer {
             this.dataInjector.purge();
         } catch (Exception e) {
             log.error("Data purging failed", e);
-            return Response.ok("Errors happens, can not purge fake data as expected " , MediaType.APPLICATION_JSON).cacheControl(cacheControl_).build();
+            return Response.serverError()
+                    .entity(String.format("Purge data failed due to %1$s",e.getMessage()))
+                    .build();
         }
-        return Response.ok("Data has been purged successfully" , MediaType.APPLICATION_JSON).cacheControl(cacheControl_).build();
+        return Response.ok(String.format("Data has been purged successfully!!!"),
+                MediaType.TEXT_PLAIN)
+                .cacheControl(cacheControl_)
+                .build();
     }
 }
