@@ -1,18 +1,14 @@
-package org.exoplatform.services.injection;
+package org.exoplatform.services.injection.helper;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.exoplatform.commons.utils.PropertyManager;
-import org.exoplatform.commons.utils.StringCommonUtils;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.container.configuration.ConfigurationManager;
-import org.exoplatform.services.injection.module.SpaceModule;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.social.core.image.ImageUtils;
 import org.exoplatform.social.core.model.AvatarAttachment;
 
-import javax.imageio.ImageIO;
 import java.io.*;
 import java.net.URLDecoder;
 import java.util.Calendar;

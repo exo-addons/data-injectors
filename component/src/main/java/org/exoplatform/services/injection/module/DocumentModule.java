@@ -1,7 +1,7 @@
 package org.exoplatform.services.injection.module;
 
 import org.exoplatform.services.injection.AbstractInjector;
-import org.exoplatform.services.injection.InjectorUtils;
+import org.exoplatform.services.injection.helper.InjectorUtils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;

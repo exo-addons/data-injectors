@@ -8,7 +8,7 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.services.injection.AbstractInjector;
-import org.exoplatform.services.injection.InjectorUtils;
+import org.exoplatform.services.injection.helper.InjectorUtils;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;

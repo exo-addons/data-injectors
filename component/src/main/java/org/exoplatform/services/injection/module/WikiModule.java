@@ -3,7 +3,7 @@ package org.exoplatform.services.injection.module;
 
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.injection.AbstractInjector;
-import org.exoplatform.services.injection.InjectorUtils;
+import org.exoplatform.services.injection.helper.InjectorUtils;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.wiki.WikiException;

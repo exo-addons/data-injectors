@@ -5,7 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.injection.AbstractInjector;
-import org.exoplatform.services.injection.InjectorUtils;
+import org.exoplatform.services.injection.helper.InjectorUtils;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.social.core.identity.model.Identity;

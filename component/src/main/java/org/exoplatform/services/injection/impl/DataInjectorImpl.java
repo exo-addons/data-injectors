@@ -5,7 +5,8 @@ import org.apache.commons.io.IOUtils;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.injection.DataInjector;
-import org.exoplatform.services.injection.InjectorUtils;
+import org.exoplatform.services.injection.helper.InjectorMonitor;
+import org.exoplatform.services.injection.helper.InjectorUtils;
 import org.exoplatform.services.injection.module.*;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -151,24 +152,31 @@ public class DataInjectorImpl implements DataInjector {
     public void inject(String scenarioName) {
 
         LOG.info("Start {} .............", this.getClass().getName());
+        InjectorMonitor injectorMonitor = new InjectorMonitor("Data Injection Process");
         //--- Start data injection
         String downloadUrl = "";
         try {
             JSONObject scenarioData = scenarios.get(scenarioName).getJSONObject("data");
             if (scenarioData.has("users")) {
                 LOG.info("Create " + scenarioData.getJSONArray("users").length() + " users.");
+                injectorMonitor.start("Processing users data");
                 userModule_.createUsers(scenarioData.getJSONArray("users"), dataFolderPath);
+                injectorMonitor.stop();
 
             }
 
             if (scenarioData.has("relations")) {
                 LOG.info("Create " + scenarioData.getJSONArray("relations").length() + " relations.");
+                injectorMonitor.start("Processing relations data");
                 userModule_.createRelations(scenarioData.getJSONArray("relations"));
+                injectorMonitor.stop();
             }
 
             if (scenarioData.has("spaces")) {
                 LOG.info("Create " + scenarioData.getJSONArray("spaces").length() + " spaces.");
+                injectorMonitor.start("Processing spaces data");
                 spaceModule_.createSpaces(scenarioData.getJSONArray("spaces"), dataFolderPath);
+                injectorMonitor.stop();
             }
 /**
  if (scenarioData.has("calendars")) {
@@ -180,21 +188,30 @@ public class DataInjectorImpl implements DataInjector {
 
             if (scenarioData.has("wikis")) {
                 LOG.info("Create " + scenarioData.getJSONArray("wikis").length() + " wikis.");
+                injectorMonitor.start("Processing wikis data");
                 wikiModule_.createUserWiki(scenarioData.getJSONArray("wikis"),dataFolderPath);
+                injectorMonitor.stop();
             }
 
 
             if (scenarioData.has("activities")) {
 
                 LOG.info("Create " + scenarioData.getJSONArray("activities").length() + " activities.");
+                injectorMonitor.start("Processing activities data");
                 activityModule_.pushActivities(scenarioData.getJSONArray("activities"));
+                injectorMonitor.stop();
             }
             if (scenarioData.has("documents")) {
                 LOG.info("Create " + scenarioData.getJSONArray("documents").length() + " documents.");
+                injectorMonitor.start("Processing documents data");
                 documentModule_.uploadDocuments(scenarioData.getJSONArray("documents"),dataFolderPath);
+                injectorMonitor.stop();
             }
             if (scenarioData.has("forums")) {
+                LOG.info("Create " + scenarioData.getJSONArray("forums").length() + " forums.");
+                injectorMonitor.start("Processing forums data");
                 forumModule_.createForumContents(scenarioData.getJSONArray("forums"));
+                injectorMonitor.stop();
             }
 
             /**
@@ -212,6 +229,7 @@ public class DataInjectorImpl implements DataInjector {
              }
              */
             LOG.info("Data Injection has been done successfully.............");
+            LOG.info(injectorMonitor.prettyPrint());
 
         } catch (JSONException e) {
             LOG.error("Syntax error when reading scenario " + scenarioName, e);
