@@ -22,13 +22,15 @@ import org.json.JSONObject;
 
 public class SpaceModule extends AbstractInjector {
 
-    /** The log. */
-    private final Log                                  LOG = ExoLogger.getLogger(SpaceModule.class);
+    /**
+     * The log.
+     */
+    private final Log LOG = ExoLogger.getLogger(SpaceModule.class);
 
     /**
      * Creates the spaces.
      *
-     * @param spaces the spaces
+     * @param spaces                the spaces
      * @param defaultDataFolderPath the default data folder path
      */
     public void createSpaces(JSONArray spaces, String defaultDataFolderPath) {
@@ -65,9 +67,9 @@ public class SpaceModule extends AbstractInjector {
     /**
      * Creates the space avatar.
      *
-     * @param name the name
-     * @param editor the editor
-     * @param avatarFile the avatar file
+     * @param name                  the name
+     * @param editor                the editor
+     * @param avatarFile            the avatar file
      * @param defaultDataFolderPath the default data folder path
      */
     private void createSpaceAvatar(String name, String editor, String avatarFile, String defaultDataFolderPath) {
@@ -94,7 +96,7 @@ public class SpaceModule extends AbstractInjector {
     /**
      * Creates the space.
      *
-     * @param name the name
+     * @param name    the name
      * @param creator the creator
      */
     private boolean createSpace(String name, String creator) {
@@ -128,7 +130,7 @@ public class SpaceModule extends AbstractInjector {
             //RequestLifeCycle.begin(chromatticManager);
             spaceService.createSpace(space, creator);
         } catch (Exception E) {
-            LOG.error( "========= ERROR when create space {} ",target.getPrettyName(),E);
+            LOG.error("========= ERROR when create space {} ", target.getPrettyName(), E);
             return false;
 
         } finally {
@@ -159,12 +161,14 @@ public class SpaceModule extends AbstractInjector {
         try {
             target = spaceService.getSpaceByDisplayName(displayName);
             if (target != null) {
-                RequestLifeCycle.begin(PortalContainer.getInstance(),true);
+
+                RequestLifeCycle.begin((ComponentRequestLifecycle)organizationService);
                 spaceService.deleteSpace(target);
                 RequestLifeCycle.end();
+
             }
         } catch (Exception E) {
-            LOG.error( "Space {} can't be deleted ",target.getPrettyName(),E);
+            LOG.error("Space {} can't be deleted ", target.getPrettyName(), E);
 
         } finally {
 

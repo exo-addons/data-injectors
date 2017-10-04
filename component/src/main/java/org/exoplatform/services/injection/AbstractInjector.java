@@ -9,6 +9,8 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.listener.ListenerService;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.social.core.manager.ActivityManager;
@@ -81,5 +83,8 @@ abstract public class AbstractInjector {
         this.repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
         this.calendarService = (CalendarService) container.getComponentInstanceOfType(CalendarService.class);
         this.extendedCalendarService = (ExtendedCalendarService) container.getComponentInstanceOfType(ExtendedCalendarService.class);
+    }
+    public Log getLog() {
+        return ExoLogger.getExoLogger(this.getClass());
     }
 }
