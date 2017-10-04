@@ -249,18 +249,20 @@ public class DataInjectorImpl implements DataInjector {
                 spaceModule_.purgeSpaces(scenarioData.getJSONArray("spaces"));
             }
 
+            /** Do not need to purge user to avoid : cannot create a deleted users
             if (scenarioData.has("users")) {
                 LOG.info("Purge " + scenarioData.getJSONArray("users").length() + " users.");
                 userModule_.purgeUsers(scenarioData.getJSONArray("users"));
 
             }
-            /**
+             */
+
 
              if (scenarioData.has("relations")) {
              LOG.info("Purge " + scenarioData.getJSONArray("relations").length() + " relations.");
              userModule_.purgeRelations(scenarioData.getJSONArray("relations"));
              }
-             */
+
 
 
             LOG.info("Data purging has been done successfully.............");

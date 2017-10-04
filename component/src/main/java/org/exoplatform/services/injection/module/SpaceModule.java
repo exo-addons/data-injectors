@@ -3,6 +3,8 @@ package org.exoplatform.services.injection.module;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.injection.AbstractInjector;
 import org.exoplatform.services.injection.helper.InjectorUtils;
@@ -143,10 +145,8 @@ public class SpaceModule extends AbstractInjector {
 
             try {
                 JSONObject space = spaces.getJSONObject(i);
-                RequestLifeCycle.begin(ExoContainerContext.getCurrentContainer());
-                purgeSpace(space.getString("displayName"));
 
-                RequestLifeCycle.end();
+                purgeSpace(space.getString("displayName"));
 
             } catch (JSONException e) {
                 LOG.error("Syntax error on space n°" + i, e);
@@ -157,15 +157,14 @@ public class SpaceModule extends AbstractInjector {
     private void purgeSpace(String displayName) {
         Space target = null;
         try {
-
             target = spaceService.getSpaceByDisplayName(displayName);
-
             if (target != null) {
+                RequestLifeCycle.begin(PortalContainer.getInstance(),true);
                 spaceService.deleteSpace(target);
+                RequestLifeCycle.end();
             }
         } catch (Exception E) {
             LOG.error( "Space {} can't be deleted ",target.getPrettyName(),E);
-
 
         } finally {
 
