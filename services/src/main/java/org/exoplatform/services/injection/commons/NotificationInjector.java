@@ -44,7 +44,11 @@ public class NotificationInjector implements ResourceContainer {
 
             long startTime = System.currentTimeMillis();
             for (MessageInfo messageInfo : messageInfos) {
-                queueMessage.put(messageInfo);
+                try {
+                    queueMessage.put(messageInfo);
+                } catch (Exception e) {
+                    LOG.error("Cannot add message " + messageInfo.getId() + " in queue", e);
+                }
             }
             long endTime = System.currentTimeMillis();
 
@@ -61,7 +65,11 @@ public class NotificationInjector implements ResourceContainer {
         try {
             long startTime = System.currentTimeMillis();
             for (int i = 0; i < 50; i++) {
-                queueMessage.send();
+                try {
+                    queueMessage.send();
+                } catch (Exception e) {
+                    LOG.error("Cannot send message from queue", e);
+                }
             }
             long endTime = System.currentTimeMillis();
             LOG.info("************* SEND Time = " + (endTime - startTime));
