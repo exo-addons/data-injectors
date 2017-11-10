@@ -30,7 +30,7 @@
       <dependencySet>
         <outputDirectory>/</outputDirectory>
         <includes>
-          <include>org.exoplatform.addons.injectors:data-injectors-services:jar</include>
+          <include>org.exoplatform.addons.injectors-custom:data-injectors-services:jar</include>
         </includes>
         <scope>provided</scope>
         <outputFileNameMapping>data-injectors-services.jar</outputFileNameMapping>

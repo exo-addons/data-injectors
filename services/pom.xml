@@ -3,15 +3,15 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>data-injectors-configuration</artifactId>
-    <groupId>org.exoplatform.addons.injectors</groupId>
+    <groupId>org.exoplatform.addons.injectors-custom</groupId>
     <version>1.0.x-SNAPSHOT</version>
   </parent>
   <artifactId>data-injectors-services</artifactId>
   <packaging>jar</packaging>
   <name>Data Injectors - Services</name>
   <properties>
-    <task.addon.version>1.3.x-SNAPSHOT</task.addon.version>
-    <answers.addon.version>1.3.x-SNAPSHOT</answers.addon.version>
+    <task.addon.version>1.2.4</task.addon.version>
+    <answers.addon.version>1.2.3</answers.addon.version>
     <itext.version>2.1.7</itext.version>
   </properties>
   <dependencies>

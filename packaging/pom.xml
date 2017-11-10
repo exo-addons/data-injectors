@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>data-injectors-configuration</artifactId>
-    <groupId>org.exoplatform.addons.injectors</groupId>
+    <groupId>org.exoplatform.addons.injectors-custom</groupId>
     <version>1.0.x-SNAPSHOT</version>
   </parent>
   <artifactId>data-injectors-packaging</artifactId>
@@ -11,7 +11,7 @@
   <name>Data Injectors - Packaging</name>
   <dependencies>
     <dependency>
-      <groupId>org.exoplatform.addons.injectors</groupId>
+      <groupId>org.exoplatform.addons.injectors-custom</groupId>
       <artifactId>data-injectors-services</artifactId>
       <scope>provided</scope>
     </dependency>

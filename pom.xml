@@ -4,9 +4,9 @@
   <parent>
     <artifactId>addons-parent-pom</artifactId>
     <groupId>org.exoplatform.addons</groupId>
-    <version>8-SNAPSHOT</version>
+    <version>7</version>
   </parent>
-  <groupId>org.exoplatform.addons.injectors</groupId>
+  <groupId>org.exoplatform.addons.injectors-custom</groupId>
   <artifactId>data-injectors-configuration</artifactId>
   <version>1.0.x-SNAPSHOT</version>
   <packaging>pom</packaging>
@@ -16,7 +16,7 @@
     <module>packaging</module>
   </modules>
   <properties>
-    <org.exoplatform.platform.version>5.0.x-SNAPSHOT</org.exoplatform.platform.version>
+    <org.exoplatform.platform.version>4.4.3</org.exoplatform.platform.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -29,7 +29,7 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>org.exoplatform.addons.injectors</groupId>
+        <groupId>org.exoplatform.addons.injectors-custom</groupId>
         <artifactId>data-injectors-services</artifactId>
         <version>${project.version}</version>
       </dependency>
