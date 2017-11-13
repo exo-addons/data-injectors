@@ -36,5 +36,14 @@
         <outputFileNameMapping>data-injectors-services.jar</outputFileNameMapping>
         <useProjectArtifact>false</useProjectArtifact>
       </dependencySet>
+      <dependencySet>
+        <outputDirectory>/</outputDirectory>
+        <includes>
+          <include>org.fluttercode.datafactory:datafactory:jar</include>
+        </includes>
+        <scope>provided</scope>
+        <outputFileNameMapping>datafactory.jar</outputFileNameMapping>
+        <useProjectArtifact>false</useProjectArtifact>
+      </dependencySet>
     </dependencySets>
 </assembly>

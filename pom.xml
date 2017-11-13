@@ -17,6 +17,8 @@
   </modules>
   <properties>
     <org.exoplatform.platform.version>4.4.3</org.exoplatform.platform.version>
+
+    <datafactory.version>0.8</datafactory.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -32,6 +34,12 @@
         <groupId>org.exoplatform.addons.injectors-custom</groupId>
         <artifactId>data-injectors-services</artifactId>
         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.fluttercode.datafactory</groupId>
+        <artifactId>datafactory</artifactId>
+        <version>${datafactory.version}</version>
+        <type>jar</type>
       </dependency>
     </dependencies>
   </dependencyManagement>

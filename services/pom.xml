@@ -13,6 +13,7 @@
     <task.addon.version>1.2.4</task.addon.version>
     <answers.addon.version>1.2.3</answers.addon.version>
     <itext.version>2.1.7</itext.version>
+    <datafactory.version>0.8</datafactory.version>
   </properties>
   <dependencies>
     <dependency>
@@ -92,6 +93,15 @@
       <artifactId>itext</artifactId>
       <version>${itext.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.fluttercode.datafactory</groupId>
+      <artifactId>datafactory</artifactId>
+    </dependency>
+      <dependency>
+          <groupId>org.exoplatform.addons.atisnetwork</groupId>
+          <artifactId>atisnetwork-services</artifactId>
+          <version>2.0.x-SNAPSHOT</version>
+      </dependency>
   </dependencies>
   <build>
     <plugins>
