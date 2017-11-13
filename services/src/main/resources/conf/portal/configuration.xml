@@ -125,6 +125,14 @@
         <type>org.exoplatform.services.injection.answers.MembershipInjector</type>
     </component>
 
+    <component>
+        <type>org.exoplatform.services.listing.DataListingRESTService</type>
+    </component>
+
+    <component>
+        <type>org.exoplatform.services.injection.custom.ProfileInjector</type>
+    </component>
+
     <external-component-plugins>
         <target-component>org.exoplatform.services.bench.DataInjectorService</target-component>
         <component-plugin>
@@ -137,6 +145,11 @@
             <name>identity</name>
             <set-method>addInjector</set-method>
             <type>org.exoplatform.services.injection.social.IdentityInjector</type>
+        </component-plugin>
+        <component-plugin>
+            <name>profile</name>
+            <set-method>addInjector</set-method>
+            <type>org.exoplatform.services.injection.custom.ProfileInjector</type>
         </component-plugin>
         <component-plugin>
             <name>space</name>
