@@ -58,18 +58,56 @@ We will describe how to use data injectors in eXo Social
 
 * This call will generate 100 users with prefix=abc
 
+-------
+The new version will not use a prefix and a counter for users. the request
+http://localhost:8080/rest/private/bench/inject/identity?number=100
+will create 100 users with a random firstname and lastname. The user name is first letter of firstname + lastname
+Each time we call this request, 100 new users are created.
+
+Then, to the user list, we add a this web service
+http://localhost:8080/rest/datalisting/identities
+The result is
+
+    acharles,exo
+    adunn,exo
+    ahiggins,exo
+    amalone,exo
+    amay,exo
+
+and can be copy/paste in a CSV file for bench purpose.
+-------
+
+*Inject Social Profile (custom)*
+|===
+|Parameter | Type | Description | Default value
+
+|fromUser
+|optional
+|The index of the first user to populate
+| 0
+
+
+|toUser
+|optional
+|The index of the last user to populate
+| last user index
+|===
+
+ http://localhost:8080/rest/private/bench/inject/profile?fromUser=0&toUser=100
+
+
 *inject space*
 
 |===
 |Parameter |Type |Description |Default value
 
 |fromUser
-|mandatory
+|optional
 |The begin of the range
 |
 
 |toUser
-|mandatory
+|optional
 |The end of the range
 |
 
