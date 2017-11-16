@@ -45,11 +45,16 @@ public class DataListingRESTService implements ResourceContainer {
         int offset=0;
         try {
             ListAccess<User> users = userHandler.findAllUsers();
-            int total = limit + offset;
-            if (total > users.getSize())
-                total = users.getSize();
-            for (int i = offset; i < total; i++) {
-                User[] usersArray =users.load(i, limit);
+            int total = users.getSize();
+            while (offset<total) {
+
+                User[] usersArray;
+                if (total-offset<limit) {
+                    //there is less than limit element to read. load to the end
+                    usersArray=users.load(offset, total-offset);
+                } else {
+                    usersArray=users.load(offset,limit);
+                }
                 for (User user:usersArray) {
                     if (!user.getUserName().equals("root")) {
                         result+=user.getUserName()+","+patternInjectorConfig.getUserPasswordValue()+"\n";
