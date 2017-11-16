@@ -37,7 +37,7 @@ public class IdentityInjector extends AbstractSocialInjector {
 
       String firstname = dataFactory.getFirstName();
       String lastName = dataFactory.getLastName();
-      String username = firstname.toLowerCase().charAt(0)+lastName.toLowerCase().replace("'","");
+      String username = firstname.toLowerCase().replace("'","")+"."+lastName.toLowerCase().replace("'","");
       if (userHandler.findUserByName(username)==null) {
         User user = userHandler.createUserInstance(username);
         user.setEmail(username + "@" + DOMAIN);
