@@ -2,9 +2,13 @@ package org.exoplatform.services.injection.custom;
 
 import com.atisnetwork.search.independent.IndependentSearchConnector;
 import com.atisnetwork.services.administration.utils.MembershipManagement;
+import com.atisnetwork.services.collaborator.CollaboratorService;
 import com.atisnetwork.services.independent.IndependentService;
+import com.atisnetwork.util.AtisUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.Constants;
 import org.exoplatform.services.injection.social.AbstractSocialInjector;
 import org.exoplatform.services.injection.social.PatternInjectorConfig;
 import org.exoplatform.services.listing.DataListingRESTService;
@@ -13,6 +17,7 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.social.core.identity.model.Profile;
 import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
 import org.fluttercode.datafactory.impl.DataFactory;
@@ -28,8 +33,10 @@ import java.util.HashMap;
 public class ProfileInjector extends AbstractSocialInjector {
 
     private static final Log LOG = ExoLogger.getLogger(ProfileInjector.class);
+    private static final String DEFAULT_PASSWORD = "exo";
 
     private OrganizationService organizationService;
+    private CollaboratorService collaboratorService;
 
     /** . */
     private static final String FROM_USER = "fromUser";
@@ -51,9 +58,10 @@ public class ProfileInjector extends AbstractSocialInjector {
     private DataFactory dataFactory;
     private String EMPLOYER_GROUP="/Atis/Employer";
 
-    public ProfileInjector(PatternInjectorConfig config, OrganizationService organizationService) {
+    public ProfileInjector(PatternInjectorConfig config, OrganizationService organizationService, CollaboratorService collaboratorService) {
         super(config);
         this.organizationService=organizationService;
+        this.collaboratorService=collaboratorService;
 
         dataFactory = new DataFactory();
     }
@@ -134,14 +142,21 @@ public class ProfileInjector extends AbstractSocialInjector {
                         endSubsDate.add(Calendar.YEAR,2);
                         String endOfSubscriptionDate=endSubsDate.get(Calendar.DAY_OF_MONTH)+"-"+(endSubsDate.get(Calendar.MONTH)+1)+"-"+endSubsDate.get(Calendar.YEAR);
 
-                        //save tvaNum
+                        //save user locale
+                        UserProfile userProfile = organizationService.getUserProfileHandler().createUserProfileInstance(user.getUserName());
+                        userProfile.setAttribute(Constants.USER_LANGUAGE, "fr");
+                        organizationService.getUserProfileHandler().saveUserProfile(userProfile, true);
 
+                        //save tvaNum
                         currentProfile.setProperty(IndependentService.TVA_NUM, dataFactory.getNumberText(10));
                         currentProfile.setProperty(ATIS_CHARTER_CHECKED,true);
                         identityManager.updateProfile(currentProfile);
 
                         independentService.setUserName(user.getUserName());
                         independentService.saveMyIndependentCard(companyName,brandName,headOfficeStreetName,headOfficePostalCode,headOfficeCity,null,null,null,establishmentsNumber,null,activityFirstDate,employer,null);
+
+                        int nbCollaboratorsToCreate=2;
+                        addCollaborators(nbCollaboratorsToCreate,user.getUserName());
 
                         LOG.info("Data profile injected for user "+user.getUserName() +"("+totalInjected+"/"+numberToInject+")");
 
@@ -156,6 +171,69 @@ public class ProfileInjector extends AbstractSocialInjector {
             LOG.error("Error when getting user list",e);
         }
 
+
+    }
+
+    private void addCollaborators(int nbCollaboratorsToCreate, String userName) {
+        for (int i=0;i<nbCollaboratorsToCreate;i++) {
+
+
+            String firstName="";
+            String lastName="";
+            String email="";
+            String collaboratorUserName="";
+            int nbTry=0;
+
+            while (firstName.equals("")) {
+                firstName=dataFactory.getFirstName();
+                lastName=dataFactory.getLastName();
+                String escapedFirstName = StringUtils.stripAccents(firstName.trim().toLowerCase().replaceAll("\\s+", "-"));
+                String escapedLastName = StringUtils.stripAccents(lastName.trim().toLowerCase().replaceAll("\\s+", "-"));
+                collaboratorUserName = AtisUtils.generateTribeUsername(escapedFirstName, escapedLastName, 0);
+                email = collaboratorUserName + "@" + DOMAIN;
+                try {
+                    if (organizationService.getUserHandler().findUserByName(collaboratorUserName) != null) {
+                        //user already exist, one more turn
+                        firstName = "";
+                        lastName = "";
+                        email="";
+                    }
+                } catch (Exception e) {
+                    LOG.error("unable to check if user "+collaboratorUserName+ " exists.", e);
+                    firstName = "";
+                    lastName = "";
+                    email="";
+                }
+                nbTry++;
+
+            }
+            LOG.info("Username generated with "+nbTry+" loops in random part.");
+
+
+            try {
+                collaboratorService.inviteCollaborator(firstName, lastName, email, userName);
+                User collaborator = organizationService.getUserHandler().findUserByName(collaboratorUserName);
+                collaborator.setPassword(DEFAULT_PASSWORD);
+                organizationService.getUserHandler().saveUser(collaborator,true);
+
+                //save user locale
+                UserProfile userProfile = organizationService.getUserProfileHandler().createUserProfileInstance(collaborator.getUserName());
+                userProfile.setAttribute(Constants.USER_LANGUAGE, "fr");
+                organizationService.getUserProfileHandler().saveUserProfile(userProfile, true);
+
+                //save charte
+                Profile currentProfile = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME,collaborator.getUserName()
+                            ,true).getProfile();
+                currentProfile.setProperty(ATIS_CHARTER_CHECKED,true);
+                identityManager.updateProfile(currentProfile);
+
+
+            } catch (Exception e) {
+                LOG.error("Unable to add "+email+" as collaborator of "+userName,e);
+            }
+
+
+        }
 
     }
 }

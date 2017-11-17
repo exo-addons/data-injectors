@@ -1,5 +1,9 @@
 package org.exoplatform.services.injection.social;
 
+import com.atisnetwork.util.AtisUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
 import org.fluttercode.datafactory.impl.DataFactory;
@@ -14,6 +18,8 @@ public class IdentityInjector extends AbstractSocialInjector {
   /** . */
   private static final String NUMBER = "number";
   private static final String PREFIX = "prefix";
+
+  private static Log LOG = ExoLogger.getLogger(IdentityInjector.class);
 
   private DataFactory dataFactory;
   
@@ -34,14 +40,36 @@ public class IdentityInjector extends AbstractSocialInjector {
     for(int i = 0; i < number; ++i) {
 
       //
+      String firstName="";
+      String lastName="";
+      String username="";
+      int nbTry=0;
 
-      String firstname = dataFactory.getFirstName();
-      String lastName = dataFactory.getLastName();
-      String username = firstname.toLowerCase().replace("'","")+"."+lastName.toLowerCase().replace("'","");
+      while (firstName.equals("")) {
+        firstName=dataFactory.getFirstName();
+        lastName=dataFactory.getLastName();
+        username = firstName.toLowerCase().replace("'","")+"."+lastName.toLowerCase().replace("'","");
+        try {
+          if (organizationService.getUserHandler().findUserByName(username) != null) {
+            //user already exist, one more turn
+            firstName = "";
+            lastName = "";
+          }
+        } catch (Exception e) {
+          LOG.error("unable to check if user "+username+ " exists.", e);
+          firstName = "";
+          lastName = "";
+        }
+        nbTry++;
+
+      }
+      LOG.info("Username generated with "+nbTry+" loops in random part.");
+
+
       if (userHandler.findUserByName(username)==null) {
         User user = userHandler.createUserInstance(username);
         user.setEmail(username + "@" + DOMAIN);
-        user.setFirstName(firstname);
+        user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setPassword(this.password);
 

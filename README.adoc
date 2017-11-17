@@ -1109,6 +1109,12 @@ WIKI inject and ECMS inject doesn't work..So it must be reviewed .
 
 
 
+=== Injection Custom
+To inject independant, profile data and collaborators, all can be done with one REST Call :
+http://localhost:8080/rest/userinjection/usersandprofiles?nbIndependants=100&nbCollaborators=2
+will create 100 independants with 2 collaborators by independants.
+
+
 
 
 
