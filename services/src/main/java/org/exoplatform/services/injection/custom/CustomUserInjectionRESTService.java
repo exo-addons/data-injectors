@@ -22,6 +22,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * Created by Romain Dénarié (romain.denarie@exoplatform.com) on 17/11/17.
@@ -121,8 +122,10 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
 
         String companyName = dataFactory.getBusinessName();
         String brandName = companyName;
+        Date minDate=dataFactory.getDate(2000, 1, 1);
+        Date maxDate = new Date();
         Calendar startDate = Calendar.getInstance();
-        startDate.setTime(dataFactory.getDate(2000, 1, 1));
+        startDate.setTime(dataFactory.getDateBetween(minDate,maxDate));
         String activityFirstDate=startDate.get(Calendar.DAY_OF_MONTH)+"-"+(startDate.get(Calendar.MONTH)+1)+"-"+startDate.get(Calendar.YEAR);
         String headOfficeStreetName=dataFactory.getAddress();
         String headOfficePostalCode=dataFactory.getNumberText(4);
