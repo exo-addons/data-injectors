@@ -85,18 +85,20 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
     public Response createUsersAndProfiles(@QueryParam("nbIndependants") int nbIndependants, @QueryParam("nbCollaborators") int nbCollaborators) {
         LOG.info("Start the creation of {} independants and {} collaborators by independants.",nbIndependants,nbCollaborators);
 
-
+        int nbCreatedUsers = 0;
         for (int i=0; i<nbIndependants;i++) {
             try {
                 //createUser
                 User user = createUser();
+                nbCreatedUsers++;
                 //fill profile
                 fillProfile(user);
-                testAndCommitBatch(i);
+                testAndCommitBatch(nbCreatedUsers);
                 //addCollaborators
                 for (int j=0;j<nbCollaborators;j++) {
                     addCollaborators(user);
-                    testAndCommitBatch(i + j);
+                    nbCreatedUsers++;
+                    testAndCommitBatch(nbCreatedUsers);
                 }
                 LOG.info("User {}/{} created as independant, profile filled, and {} collaborators created.",i+1, nbIndependants, nbCollaborators);
             } catch (Exception e) {
@@ -110,6 +112,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
 
     private void testAndCommitBatch(int injectedUsers) {
       if (injectedUsers % batchSize == 0) {
+          LOG.info("Commit batch "+injectedUsers+", batchSize = "+batchSize);
         RequestLifeCycle.end();
         RequestLifeCycle.begin(this.portalContainer);
       }
