@@ -2,6 +2,12 @@ package org.exoplatform.services.injection.custom;
 
 import com.atisnetwork.services.collaborator.CollaboratorService;
 import com.atisnetwork.services.independent.IndependentService;
+
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.RequestLifeCycle;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.Parameter;
+import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -13,6 +19,8 @@ import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.social.core.identity.model.Profile;
 import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
 import org.exoplatform.social.core.manager.IdentityManager;
+
+import org.apache.commons.lang.StringUtils;
 import org.fluttercode.datafactory.impl.DataFactory;
 
 import javax.annotation.security.RolesAllowed;
@@ -37,6 +45,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
     private OrganizationService organizationService;
     private IdentityManager identityManager;
     private CollaboratorService collaboratorService;
+    private PortalContainer portalContainer;
 
     private static final String DOMAIN = "exoplatform.int";
     private static final String DEFAULT_PASSWORD = "!%b@Ti5%!";
@@ -47,14 +56,26 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
     private static final String COLLAB_TVA_NUM = "collabTvaNum";
     private String EMPLOYER_GROUP="/Atis/Employer";
     private static final String ATIS_CHARTER_CHECKED = "atisCharterChecked";
-    
 
+    private int batchSize = 100;
 
-    public CustomUserInjectionRESTService(OrganizationService organizationService, IdentityManager identityManager,
-                                          CollaboratorService collaboratorService) {
+    public CustomUserInjectionRESTService(PortalContainer portalContainer, OrganizationService organizationService, IdentityManager identityManager,
+                                          CollaboratorService collaboratorService, InitParams initParams) {
         this.organizationService = organizationService;
         this.identityManager = identityManager;
         this.collaboratorService = collaboratorService;
+        this.portalContainer = portalContainer;
+        if(initParams != null && initParams.containsKey("batch_size")) {
+          ValueParam batchSizeParam = initParams.getValueParam("batch_size");
+          String batchSizeValue = batchSizeParam.getValue();
+          if (StringUtils.isNotBlank(batchSizeValue)) {
+            try {
+              batchSize = Integer.parseInt(batchSizeValue);
+            } catch (Exception e) {
+              LOG.warn("Unable to parse batch_size parameter '" + batchSizeValue + "'", e);
+            }
+          }
+        }
         dataFactory = new DataFactory();
     }
 
@@ -71,19 +92,27 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
                 User user = createUser();
                 //fill profile
                 fillProfile(user);
+                testAndCommitBatch(i);
                 //addCollaborators
                 for (int j=0;j<nbCollaborators;j++) {
                     addCollaborators(user);
+                    testAndCommitBatch(i + j);
                 }
                 LOG.info("User {}/{} created as independant, profile filled, and {} collaborators created.",i+1, nbIndependants, nbCollaborators);
             } catch (Exception e) {
                 LOG.error("Error when treating user n°{}",i,e);
             }
-
         }
         LOG.info("End of data injection");
         return Response.ok().build();
 
+    }
+
+    private void testAndCommitBatch(int injectedUsers) {
+      if (injectedUsers % batchSize == 0) {
+        RequestLifeCycle.end();
+        RequestLifeCycle.begin(this.portalContainer);
+      }
     }
 
     private void addCollaborators(User independant) throws Exception {
