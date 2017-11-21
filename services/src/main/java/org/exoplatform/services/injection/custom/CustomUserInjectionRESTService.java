@@ -82,8 +82,13 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
     @GET
     @Path("/usersandprofiles")
     @RolesAllowed({"administrators"})
-    public Response createUsersAndProfiles(@QueryParam("nbIndependants") int nbIndependants, @QueryParam("nbCollaborators") int nbCollaborators) {
+    public Response createUsersAndProfiles(@QueryParam("nbIndependants") int nbIndependants, @QueryParam("nbCollaborators") int nbCollaborators,@QueryParam("batchSize") int batchSize) {
         LOG.info("Start the creation of {} independants and {} collaborators by independants.",nbIndependants,nbCollaborators);
+
+        int customBatchSize = this.batchSize;
+        if (batchSize!=0) {
+            customBatchSize=batchSize;
+        }
 
         int nbCreatedUsers = 0;
         for (int i=0; i<nbIndependants;i++) {
@@ -93,12 +98,12 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
                 nbCreatedUsers++;
                 //fill profile
                 fillProfile(user);
-                testAndCommitBatch(nbCreatedUsers);
+                testAndCommitBatch(nbCreatedUsers, customBatchSize);
                 //addCollaborators
                 for (int j=0;j<nbCollaborators;j++) {
                     addCollaborators(user);
                     nbCreatedUsers++;
-                    testAndCommitBatch(nbCreatedUsers);
+                    testAndCommitBatch(nbCreatedUsers, customBatchSize);
                 }
                 LOG.info("User {}/{} created as independant, profile filled, and {} collaborators created.",i+1, nbIndependants, nbCollaborators);
             } catch (Exception e) {
@@ -110,9 +115,9 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
 
     }
 
-    private void testAndCommitBatch(int injectedUsers) {
-      if (injectedUsers % batchSize == 0) {
-          LOG.info("Commit batch "+injectedUsers+", batchSize = "+batchSize);
+    private void testAndCommitBatch(int injectedUsers, int customBatchSize) {
+      if (injectedUsers % customBatchSize == 0) {
+          LOG.info("Commit batch "+injectedUsers+", batchSize = "+customBatchSize);
         RequestLifeCycle.end();
         RequestLifeCycle.begin(this.portalContainer);
       }
