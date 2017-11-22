@@ -134,7 +134,7 @@
           <value-param>
             <name>batch_size</name>
             <description>Batch size for user creation</description>
-            <value>{exo.injection.user.batchSize:100}</value>
+            <value>${exo.injection.user.batchSize:100}</value>
           </value-param>
         </init-params>
     </component>
