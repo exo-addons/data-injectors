@@ -75,6 +75,21 @@ The result is
     amay,exo
 
 and can be copy/paste in a CSV file for bench purpose.
+
+To list searchTerms for independent :
+http://localhost:8080/rest/datalisting/searchTerms
+The result is
+
+    Root
+    Lindsey
+    Craft
+    Lenox
+    Motors
+    Wayne
+    Guerrero
+    Joyce
+
+It take all distinct firstname, lastname, and unique word for all company names.
 -------
 
 *Inject Social Profile (custom)*
