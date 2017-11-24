@@ -152,8 +152,8 @@ public class ProfileInjector extends AbstractSocialInjector {
                         currentProfile.setProperty(ATIS_CHARTER_CHECKED,true);
                         identityManager.updateProfile(currentProfile);
 
-                        independentService.setUserName(user.getUserName());
-                        independentService.saveMyIndependentCard(companyName,brandName,headOfficeStreetName,headOfficePostalCode,headOfficeCity,null,null,null,establishmentsNumber,null,activityFirstDate,employer,null);
+
+                        independentService.saveMyIndependentCard(user.getUserName(),companyName,brandName,headOfficeStreetName,headOfficePostalCode,headOfficeCity,null,null,null,establishmentsNumber,null,activityFirstDate,employer,null);
 
                         int nbCollaboratorsToCreate=2;
                         addCollaborators(nbCollaboratorsToCreate,user.getUserName());

@@ -3,10 +3,10 @@ package org.exoplatform.services.injection.custom;
 import com.atisnetwork.services.collaborator.CollaboratorService;
 import com.atisnetwork.services.independent.IndependentService;
 
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.container.xml.Parameter;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.services.log.ExoLogger;
@@ -21,6 +21,10 @@ import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvide
 import org.exoplatform.social.core.manager.IdentityManager;
 
 import org.apache.commons.lang.StringUtils;
+import org.exoplatform.social.core.space.SpaceListAccess;
+import org.exoplatform.social.core.space.model.Space;
+import org.exoplatform.social.core.space.spi.SpaceService;
+import org.exoplatform.social.core.storage.api.SpaceStorage;
 import org.fluttercode.datafactory.impl.DataFactory;
 
 import javax.annotation.security.RolesAllowed;
@@ -28,9 +32,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by Romain Dénarié (romain.denarie@exoplatform.com) on 17/11/17.
@@ -46,6 +48,9 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
     private IdentityManager identityManager;
     private CollaboratorService collaboratorService;
     private PortalContainer portalContainer;
+    private SpaceStorage spaceStorage;
+    private SpaceService spaceService;
+    private IndependentService independentService;
 
     private static final String DOMAIN = "exoplatform.int";
     private static final String DEFAULT_PASSWORD = "!%b@Ti5%!";
@@ -56,15 +61,23 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
     private static final String COLLAB_TVA_NUM = "collabTvaNum";
     private String EMPLOYER_GROUP="/Atis/Employer";
     private static final String ATIS_CHARTER_CHECKED = "atisCharterChecked";
+    public static final String ACTIVITIES = "activities";
+    public static final String PROVINCES = "provinces";
+
 
     private int batchSize = 100;
 
     public CustomUserInjectionRESTService(PortalContainer portalContainer, OrganizationService organizationService, IdentityManager identityManager,
-                                          CollaboratorService collaboratorService, InitParams initParams) {
+                                          CollaboratorService collaboratorService, InitParams initParams,
+                                          SpaceStorage spaceStorage, SpaceService spaceService, IndependentService
+                                                  independentService) {
         this.organizationService = organizationService;
         this.identityManager = identityManager;
         this.collaboratorService = collaboratorService;
         this.portalContainer = portalContainer;
+        this.spaceStorage = spaceStorage;
+        this.spaceService = spaceService;
+        this.independentService = independentService;
         if(initParams != null && initParams.containsKey("batch_size")) {
           ValueParam batchSizeParam = initParams.getValueParam("batch_size");
           String batchSizeValue = batchSizeParam.getValue();
@@ -91,13 +104,29 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         }
 
         int nbCreatedUsers = 0;
+        Collection<Group> employerGroups = new ArrayList<Group>();
+        try {
+            Group employerGroup = organizationService.getGroupHandler().findGroupById(EMPLOYER_GROUP);
+            employerGroups = organizationService.getGroupHandler().findGroups(employerGroup);
+        } catch (Exception e) {
+            LOG.error("Unable to find employer groups ",e);
+
+        }
+        String[] employerValues = new String[employerGroups.size()];
+        int currentIndex=0;
+        for (Group current : employerGroups) {
+            employerValues[currentIndex]=current.getGroupName();
+            currentIndex++;
+        }
+
         for (int i=0; i<nbIndependants;i++) {
             try {
                 //createUser
                 User user = createUser();
                 nbCreatedUsers++;
                 //fill profile
-                fillProfile(user);
+                Space[] visibleSpaces = getNotHiddenSpaces(user.getUserName());
+                fillProfile(user,employerValues, visibleSpaces);
                 testAndCommitBatch(nbCreatedUsers, customBatchSize);
                 //addCollaborators
                 for (int j=0;j<nbCollaborators;j++) {
@@ -147,7 +176,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
 
     }
 
-    private void fillProfile(User user) throws Exception {
+    private void fillProfile(User user, String[] employerValues, Space[] visibleSpaces) throws Exception {
         Profile currentProfile = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME,user.getUserName()
                 ,true).getProfile();
 
@@ -155,7 +184,6 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
                 organizationService.getGroupHandler().findGroupById(ATIS_INDEPENDENTS_GROUP),
                 organizationService.getMembershipTypeHandler().findMembershipType(MEMBER_ROLE),true);
 
-        IndependentService independentService = new IndependentService();
 
         String companyName = dataFactory.getBusinessName();
         String brandName = companyName;
@@ -172,17 +200,6 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         String headOfficeCity=dataFactory.getCity();
         String establishmentsNumber="1";
 
-
-
-        Group employerGroup = organizationService.getGroupHandler().findGroupById(EMPLOYER_GROUP);
-        Collection<Group> employerGroups= organizationService.getGroupHandler().findGroups(employerGroup);
-
-        String[] employerValues = new String[employerGroups.size()];
-        int currentIndex=0;
-        for (Group current : employerGroups) {
-            employerValues[currentIndex]=current.getGroupName();
-            currentIndex++;
-        }
         String employer=dataFactory.getItem(employerValues);
         String tvaNum = dataFactory.getNumberText(10);
         Calendar endSubsDate = Calendar.getInstance();
@@ -197,10 +214,15 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         //save tvaNum
         currentProfile.setProperty(IndependentService.TVA_NUM, tvaNum);
         currentProfile.setProperty(ATIS_CHARTER_CHECKED,true);
+        currentProfile.setProperty(PROVINCES,new ArrayList<>());
+        currentProfile.setProperty(ACTIVITIES,new ArrayList<>());
         identityManager.updateProfile(currentProfile);
 
-        independentService.setUserName(user.getUserName());
-        independentService.saveMyIndependentCard(companyName,brandName,headOfficeStreetName,headOfficePostalCode,headOfficeCity,null,null,null,establishmentsNumber,null,activityFirstDate,employer,null);
+        independentService.saveMyIndependentCard(user.getUserName(),companyName,brandName,headOfficeStreetName,headOfficePostalCode,headOfficeCity,null,null,null,establishmentsNumber,null,activityFirstDate,employer,null);
+        String presentation =this.getRandomText(50,300,dataFactory);
+        independentService.saveMyIndependentActivity(user.getUserName(),presentation,new ArrayList<>(),new ArrayList<>());
+
+        spaceService.addMember(dataFactory.getItem(visibleSpaces),user.getUserName());
 
     }
 
@@ -270,5 +292,43 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         }
         LOG.info("Username generated with "+nbTry+" loops in random part.");
         return new RandomUser(firstName, lastName, username);
+    }
+
+    public Space[] getNotHiddenSpaces(String userId){
+        try {
+            ListAccess<Space> allSpaces = new SpaceListAccess(this.spaceStorage, userId, SpaceListAccess.Type.VISIBLE);
+
+            return allSpaces.load(0, allSpaces.getSize());
+
+        } catch (Exception e) {
+            LOG.error("Unable to get public spaces",e);
+            return new Space[0];
+        }
+
+    }
+
+    //override datafactory getRandomText
+    //the version in 0.8 create a single word
+    //We need a real text
+    public String getRandomText(int minLength, int maxLength, DataFactory dataFactory) {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(maxLength);
+        int length = minLength;
+        if (maxLength != minLength) {
+            length = length + random.nextInt(maxLength - minLength);
+        }
+        while (length > 0) {
+            if (sb.length() != 0) {
+                sb.append(" ");
+                length--;
+            }
+            final double desiredWordLengthNormalDistributed = 1.0 + Math.abs(random.nextGaussian()) * 6;
+            int usedWordLength = (int) (Math.min(length, desiredWordLengthNormalDistributed));
+            String word = dataFactory.getRandomWord(usedWordLength);
+            sb.append(word);
+            length = length - word.length();
+        }
+        return sb.toString();
+
     }
 }
