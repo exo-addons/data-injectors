@@ -3,6 +3,13 @@ package org.exoplatform.services.injection.custom;
 import com.atisnetwork.services.collaborator.CollaboratorService;
 import com.atisnetwork.services.independent.IndependentService;
 
+
+import com.lowagie.text.pdf.PdfWriter;
+
+import com.lowagie.text.Document;
+import com.lowagie.text.Paragraph;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
@@ -32,6 +39,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
+
+
+import java.io.OutputStream;
 import java.util.*;
 
 /**
@@ -44,6 +54,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
     private static Log LOG = ExoLogger.getLogger(CustomUserInjectionRESTService.class);
 
     private DataFactory dataFactory;
+    private DiskFileItemFactory diskFilefactory;
     private OrganizationService organizationService;
     private IdentityManager identityManager;
     private CollaboratorService collaboratorService;
@@ -90,6 +101,8 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
           }
         }
         dataFactory = new DataFactory();
+        diskFilefactory = new DiskFileItemFactory();
+
     }
 
     @GET
@@ -222,6 +235,16 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         String presentation =this.getRandomText(50,300,dataFactory);
         independentService.saveMyIndependentActivity(user.getUserName(),presentation,new ArrayList<>(),new ArrayList<>());
 
+
+
+        int nbDocumentsToGenerate = dataFactory.getNumberBetween(1,3);
+        for (int i=0;i<nbDocumentsToGenerate;i++) {
+            String fileName = dataFactory.getRandomText(4,8);
+            FileItem file = diskFilefactory.createItem(fileName+".pdf", "application/pdf", false, fileName+".pdf");
+            OutputStream out = file.getOutputStream();
+            createPDFDocument(out);
+            independentService.addAttachmentForUser(file, user.getUserName(), user.getUserName());
+        }
         spaceService.addMember(dataFactory.getItem(visibleSpaces),user.getUserName());
 
     }
@@ -330,5 +353,26 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         }
         return sb.toString();
 
+    }
+
+    // Create PDF (.pdf) document
+    public boolean createPDFDocument(OutputStream file) {
+
+        int nbParagraph = dataFactory.getNumberBetween(5,15);
+
+        try {
+            Document document = new Document();
+            PdfWriter.getInstance(document, file);
+            document.open();
+            for (int i=0;i<nbParagraph;i++){
+                String content = this.getRandomText(100,300,dataFactory);
+                document.add(new Paragraph(content+"\n"));
+            }
+            document.close();
+            file.close();
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
     }
 }
