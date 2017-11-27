@@ -411,11 +411,11 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
     @GET
     @Path("/collaborativesSpaces")
     @RolesAllowed({"administrators"})
-    public Response createCollaborativesSpaces(@QueryParam("nbSpaces") int nbSpaces, @QueryParam("nbUsersBySpaces") int nbUsersBySpaces) {
+    public Response createCollaborativesSpaces(@QueryParam("nbSpaces") int nbSpaces, @QueryParam("nbUsersBySpaces") int nbUsersBySpaces, @QueryParam("usersOffset") int usersOffset) {
         LOG.info("Start the creation of {} spaces with {} users by spaces.",nbSpaces,nbUsersBySpaces);
 
         //we use AtomicInteger to be able to modify the value in getNextUser()
-        AtomicInteger offset=new AtomicInteger(0);
+        AtomicInteger offset=new AtomicInteger(usersOffset);
         int nbCreatedSpaces=0;
         try {
             ListAccess<User> users= organizationService.getUserHandler().findAllUsers();

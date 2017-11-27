@@ -1147,6 +1147,11 @@ The nth+2 is invited in the new space
 ...
 If we use all users, we go back to the first one, and loop, until create nbSpaces spaces.
 
+An optionnal parameter can be passed :
+usersOffset
+This parameter allows to start the creation of spaces with a user different than the first one :
+http://localhost:8080/rest/userinjection/collaborativesSpaces?nbSpaces=10&nbUsersBySpaces=3&usersOffset=1000
+
 
 
 
