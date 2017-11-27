@@ -23,17 +23,19 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.rest.resource.ResourceContainer;
-import org.exoplatform.social.core.identity.model.Identity;
 import org.exoplatform.social.core.identity.model.Profile;
 import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
+import org.exoplatform.social.core.image.ImageUtils;
 import org.exoplatform.social.core.manager.IdentityManager;
 
 import org.apache.commons.lang.StringUtils;
-import org.exoplatform.social.core.profile.ProfileFilter;
+import org.exoplatform.social.core.model.AvatarAttachment;
 import org.exoplatform.social.core.space.SpaceListAccess;
 import org.exoplatform.social.core.space.model.Space;
 import org.exoplatform.social.core.space.spi.SpaceService;
 import org.exoplatform.social.core.storage.api.SpaceStorage;
+import org.exoplatform.task.domain.Task;
+import org.exoplatform.task.service.TaskService;
 import org.fluttercode.datafactory.impl.DataFactory;
 
 import javax.annotation.security.RolesAllowed;
@@ -43,7 +45,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -65,6 +69,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
     private SpaceStorage spaceStorage;
     private SpaceService spaceService;
     private IndependentService independentService;
+    private TaskService taskService;
 
     private static final String DOMAIN = "exoplatform.int";
     private static final String DEFAULT_PASSWORD = "!%b@Ti5%!";
@@ -84,7 +89,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
     public CustomUserInjectionRESTService(PortalContainer portalContainer, OrganizationService organizationService, IdentityManager identityManager,
                                           CollaboratorService collaboratorService, InitParams initParams,
                                           SpaceStorage spaceStorage, SpaceService spaceService, IndependentService
-                                                  independentService) {
+                                                  independentService, TaskService taskService) {
         this.organizationService = organizationService;
         this.identityManager = identityManager;
         this.collaboratorService = collaboratorService;
@@ -92,6 +97,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         this.spaceStorage = spaceStorage;
         this.spaceService = spaceService;
         this.independentService = independentService;
+        this.taskService = taskService;
         if(initParams != null && initParams.containsKey("batch_size")) {
           ValueParam batchSizeParam = initParams.getValueParam("batch_size");
           String batchSizeValue = batchSizeParam.getValue();
@@ -188,8 +194,25 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         Profile currentProfile = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME,collaborator.getUserName()
                 ,true).getProfile();
         currentProfile.setProperty(ATIS_CHARTER_CHECKED,true);
+        setAvatar(currentProfile,"https://api.adorable.io/avatars/200/"+collaborator.getEmail());
         identityManager.updateProfile(currentProfile);
 
+        //create tasks for user
+        addPersonalTasksByUser(collaborator.getUserName(),dataFactory.getNumberUpTo(3));
+
+    }
+
+    private void setAvatar(Profile currentProfile, String url) {
+
+        try {
+            InputStream input = new URL(url).openStream();
+            AvatarAttachment avatarAttachment = ImageUtils.createResizedAvatarAttachment(input, 200, 200, null,
+                    "avatar.png", "image/png", null);
+            currentProfile.setProperty(Profile.AVATAR, avatarAttachment);
+            input.close();
+        } catch (Exception e) {
+            LOG.error("Error when getting avatar image for url {}",url,e);
+        }
     }
 
     private void fillProfile(User user, String[] employerValues, Space[] visibleSpaces) throws Exception {
@@ -232,6 +255,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         currentProfile.setProperty(ATIS_CHARTER_CHECKED,true);
         currentProfile.setProperty(PROVINCES,new ArrayList<>());
         currentProfile.setProperty(ACTIVITIES,new ArrayList<>());
+        setAvatar(currentProfile,"https://api.adorable.io/avatars/200/"+user.getEmail());
         identityManager.updateProfile(currentProfile);
 
         independentService.saveMyIndependentCard(user.getUserName(),companyName,brandName,headOfficeStreetName,headOfficePostalCode,headOfficeCity,null,null,null,establishmentsNumber,null,activityFirstDate,employer,null);
@@ -248,7 +272,12 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
             createPDFDocument(out);
             independentService.addAttachmentForUser(file, user.getUserName(), user.getUserName());
         }
+
+        //add user in a community space
         spaceService.addMember(dataFactory.getItem(visibleSpaces),user.getUserName());
+
+        //create tasks for user
+        addPersonalTasksByUser(user.getUserName(),dataFactory.getNumberUpTo(3));
 
     }
 
@@ -452,6 +481,28 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
             LOG.error("Unable to get User in list access");
         }
         return null;
+    }
+
+
+    private void addPersonalTasksByUser(String username, int nbTasks) {
+
+        //Create tasks
+        //Create tasks associated to personal project of the user
+        //Loop on number of projects
+        for (int i = 0; i < nbTasks; i++) {
+
+            String taskTitle=getRandomText(8,15,dataFactory);
+            String taskDescription=getRandomText(20,50,dataFactory);
+
+            Task task = new Task();
+            task.setTitle(taskTitle);
+            task.setDescription(taskDescription);
+            task.setCreatedBy(username);
+            task.setAssignee(username);
+            task.setCreatedTime(new Date());
+            taskService.createTask(task);
+        }
+
     }
 
 }
