@@ -23,11 +23,13 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.rest.resource.ResourceContainer;
+import org.exoplatform.social.core.identity.model.Identity;
 import org.exoplatform.social.core.identity.model.Profile;
 import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
 import org.exoplatform.social.core.manager.IdentityManager;
 
 import org.apache.commons.lang.StringUtils;
+import org.exoplatform.social.core.profile.ProfileFilter;
 import org.exoplatform.social.core.space.SpaceListAccess;
 import org.exoplatform.social.core.space.model.Space;
 import org.exoplatform.social.core.space.spi.SpaceService;
@@ -43,6 +45,7 @@ import javax.ws.rs.core.Response;
 
 import java.io.OutputStream;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Romain Dénarié (romain.denarie@exoplatform.com) on 17/11/17.
@@ -375,4 +378,80 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
             return false;
         }
     }
+
+    @GET
+    @Path("/collaborativesSpaces")
+    @RolesAllowed({"administrators"})
+    public Response createCollaborativesSpaces(@QueryParam("nbSpaces") int nbSpaces, @QueryParam("nbUsersBySpaces") int nbUsersBySpaces) {
+        LOG.info("Start the creation of {} spaces with {} users by spaces.",nbSpaces,nbUsersBySpaces);
+
+        //we use AtomicInteger to be able to modify the value in getNextUser()
+        AtomicInteger offset=new AtomicInteger(0);
+        int nbCreatedSpaces=0;
+        try {
+            ListAccess<User> users= organizationService.getUserHandler().findAllUsers();
+            for (int i=0;i<nbSpaces;i++) {
+                User creator = getNextUser(users, offset);
+                User collaborator = getNextUser(users, offset);
+                String spaceName = getRandomText(8, 20, dataFactory);
+                String messageSubject = getRandomText(8, 20, dataFactory);
+                String message = getRandomText(20, 100, dataFactory);
+
+                //create the space
+                collaboratorService.createSpaceAndInviteCollaborator(spaceName, creator.getUserName(), collaborator.getUserName(), messageSubject, message);
+                Space space = spaceService.getSpaceByDisplayName(spaceName);
+
+                //accept the invitation
+                spaceService.addMember(space, collaborator.getUserName());
+
+                if (space != null){
+                    for (int j = 2; j < nbUsersBySpaces; j++) {
+                        User newCollaborator = getNextUser(users, offset);
+                        //invite a user
+                        collaboratorService.inviteCollaboratorToSpace(space.getGroupId(), creator.getUserName(), newCollaborator.getUserName(), messageSubject, message);
+
+                        //accept the invitation
+                        spaceService.addMember(space, newCollaborator.getUserName());
+
+                    }
+                }
+                nbCreatedSpaces++;
+                LOG.info("{}/{} spaces created with {} users in each.", nbCreatedSpaces,nbSpaces,nbUsersBySpaces);
+
+            }
+
+
+        } catch (Exception e) {
+            LOG.error("Error when getting user list",e);
+        }
+
+
+        LOG.info("End of data injection");
+        return Response.ok().build();
+
+    }
+
+    private User getNextUser(ListAccess<User> users, AtomicInteger currentOffset) {
+
+        int limit = 1;
+        try {
+            int total = users.getSize();
+            while (currentOffset.intValue()<total) {
+
+                User[] usersArray;
+                usersArray = users.load(currentOffset.intValue(), limit);
+                currentOffset.set(currentOffset.addAndGet(limit));
+                User userToReturn = usersArray [0];
+
+                return userToReturn.getUserName().equals("root") ? getNextUser(users,currentOffset) : usersArray[0];
+            }
+            //on est à currentOffset==total. On reset offset et on recommence
+            currentOffset.set(0);
+            return getNextUser(users,currentOffset);
+        } catch (Exception e) {
+            LOG.error("Unable to get User in list access");
+        }
+        return null;
+    }
+
 }

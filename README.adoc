@@ -1131,6 +1131,22 @@ will create 100 independants with 2 collaborators by independants.
 
 batchSize is optionnal an indicate how many user we create before commiting the transaction.
 
+To create collaborative spaces between independents and collaborators :
+http://localhost:8080/rest/userinjection/collaborativesSpaces?nbSpaces=10&nbUsersBySpaces=3
+
+nbSpaces : the number of spaces to creates
+nbUsersBySpaces : the number of users to add in spaces
+
+This service take the user list.
+The first user is the creator of the space
+The second if the first invited in the space
+...
+The nth is the nth invited in the space
+The nth+1 is the creator of a new space
+The nth+2 is invited in the new space
+...
+If we use all users, we go back to the first one, and loop, until create nbSpaces spaces.
+
 
 
 
