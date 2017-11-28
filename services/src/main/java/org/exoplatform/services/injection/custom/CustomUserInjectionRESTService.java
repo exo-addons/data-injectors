@@ -86,7 +86,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
     public static final String PROVINCES = "provinces";
 
 
-    private int batchSize = 100;
+    private int batchSize = 1;
 
     public CustomUserInjectionRESTService(PortalContainer portalContainer, OrganizationService organizationService, IdentityManager identityManager,
                                           CollaboratorService collaboratorService, InitParams initParams,

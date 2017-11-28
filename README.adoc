@@ -1,4 +1,5 @@
 = *eXo data-injectors*
+:toc:
 
 A *data injectors* for eXo that allows administrators to inject content types
  such as: social (users, connections, spaces, membership),forum (post, topic), wiki (wiki page), ecms (pdf, doc, xls,... document), FAQ(category,questions,answers..)
@@ -1122,27 +1123,36 @@ WIKI inject and ECMS inject doesn't work..So it must be reviewed .
 |5.0.x
 |===
 
+== Custom Injection
 
+=== Community Spaces injection
 
-=== Injection Custom
+To inject 3 Community spaces :
 
-
-To create communitySpaces :
 https://localhost:8080/rest/private/userinjection/communitySpaces?nbSpaces=3
 
+* nbSpaces : the number of spaces to create (access : listed + moderated)
 
-To inject independant, profile data and collaborators, all can be done with one REST Call :
-http://localhost:8080/rest/userinjection/usersandprofiles?nbIndependants=100&nbCollaborators=2&batchSize=10
-will create 100 independants with 2 collaborators by independants.
+=== Independants and collaborators injection
 
-batchSize is optionnal an indicate how many user we create before commiting the transaction.
+To inject 100 independants with their profile data and 2 collaborators each :
 
-To create collaborative spaces between independents and collaborators :
+http://localhost:8080/rest/userinjection/usersandprofiles?nbIndependants=100&nbCollaborators=2
+
+* nbIndependants : the number of Independant to create
+* nbCollaborators : the number if Collaborator to create for each created Independant
+
+=== Collaborative Spaces injection
+
+To create 10 collaborative spaces between independents and collaborators :
 http://localhost:8080/rest/userinjection/collaborativesSpaces?nbSpaces=10&nbUsersBySpaces=3
 
-nbSpaces : the number of spaces to creates
-nbUsersBySpaces : the number of users to add in spaces
+* nbSpaces : the number of Spaces to creates (access : hidden + closed)
+* nbUsersBySpaces : the number of users to add in each created space
+* usersOffset (optionnal) : the user number to start with to inject users in the generated spaces
 
+.Algorithm
+----
 This service take the user list.
 The first user is the creator of the space
 The second if the first invited in the space
@@ -1152,11 +1162,7 @@ The nth+1 is the creator of a new space
 The nth+2 is invited in the new space
 ...
 If we use all users, we go back to the first one, and loop, until create nbSpaces spaces.
-
-An optionnal parameter can be passed :
-usersOffset
-This parameter allows to start the creation of spaces with a user different than the first one :
-http://localhost:8080/rest/userinjection/collaborativesSpaces?nbSpaces=10&nbUsersBySpaces=3&usersOffset=1000
+----
 
 
 
