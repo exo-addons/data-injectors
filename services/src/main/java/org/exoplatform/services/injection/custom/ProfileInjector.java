@@ -1,17 +1,13 @@
 package org.exoplatform.services.injection.custom;
 
-import com.atisnetwork.search.independent.IndependentSearchConnector;
-import com.atisnetwork.services.administration.utils.MembershipManagement;
 import com.atisnetwork.services.collaborator.CollaboratorService;
 import com.atisnetwork.services.independent.IndependentService;
 import com.atisnetwork.util.AtisUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.exoplatform.commons.utils.ListAccess;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.services.injection.social.AbstractSocialInjector;
 import org.exoplatform.services.injection.social.PatternInjectorConfig;
-import org.exoplatform.services.listing.DataListingRESTService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
@@ -37,6 +33,7 @@ public class ProfileInjector extends AbstractSocialInjector {
 
     private OrganizationService organizationService;
     private CollaboratorService collaboratorService;
+    private IndependentService independentService;
 
     /** . */
     private static final String FROM_USER = "fromUser";
@@ -58,10 +55,11 @@ public class ProfileInjector extends AbstractSocialInjector {
     private DataFactory dataFactory;
     private String EMPLOYER_GROUP="/Atis/Employer";
 
-    public ProfileInjector(PatternInjectorConfig config, OrganizationService organizationService, CollaboratorService collaboratorService) {
+    public ProfileInjector(PatternInjectorConfig config, OrganizationService organizationService, CollaboratorService collaboratorService, IndependentService independentService) {
         super(config);
         this.organizationService=organizationService;
         this.collaboratorService=collaboratorService;
+        this.independentService = independentService;
 
         dataFactory = new DataFactory();
     }
@@ -121,8 +119,6 @@ public class ProfileInjector extends AbstractSocialInjector {
                         organizationService.getMembershipHandler().linkMembership(user,
                                 organizationService.getGroupHandler().findGroupById(ATIS_INDEPENDENTS_GROUP),
                                 organizationService.getMembershipTypeHandler().findMembershipType(MEMBER_ROLE),true);
-
-                        IndependentService independentService = new IndependentService();
 
                         String companyName = dataFactory.getBusinessName();
                         String brandName = companyName;
