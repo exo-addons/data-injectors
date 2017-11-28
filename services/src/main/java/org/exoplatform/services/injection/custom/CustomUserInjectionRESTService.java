@@ -413,8 +413,8 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         int nbTry=0;
 
         while (firstName.equals("")) {
-            firstName=dataFactory.getFirstName().replace("'","").replace("-","");
-            lastName=dataFactory.getLastName().replace("'","").replace("-","");;
+            firstName=dataFactory.getFirstName().replaceAll("'","").replaceAll("-","").replaceAll(" ","");
+            lastName=dataFactory.getLastName().replaceAll("'","").replaceAll("-","").replaceAll(" ","");
             username = firstName.toLowerCase()+"."+lastName.toLowerCase();
             try {
                 if (organizationService.getUserHandler().findUserByName(username) != null) {
