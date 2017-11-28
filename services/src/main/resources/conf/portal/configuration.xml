@@ -242,7 +242,7 @@
             <type>org.exoplatform.services.injection.wiki.WikiDataInjector</type>
             <description>inject data for Wiki</description>
         </component-plugin>
-        <component-plugin>
+        <!--component-plugin>
             <name>faqProfile</name>
             <set-method>addInjector</set-method>
             <type>org.exoplatform.services.injection.answers.ProfileInjector</type>
@@ -276,6 +276,6 @@
             <name>faqMembership</name>
             <set-method>addInjector</set-method>
             <type>org.exoplatform.services.injection.answers.MembershipInjector</type>
-        </component-plugin>
+        </component-plugin-->
     </external-component-plugins>
 </configuration>
