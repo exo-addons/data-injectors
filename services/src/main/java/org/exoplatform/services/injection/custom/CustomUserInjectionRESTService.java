@@ -353,13 +353,13 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         Space communitySpace = dataFactory.getItem(visibleSpaces,25,null);
         if (communitySpace!=null) {
             spaceService.addMember(dataFactory.getItem(visibleSpaces),user.getUserName());
+            //10% in at least 3 community spaces
+            communitySpace = dataFactory.getItem(visibleSpaces,10,null);
+            if (communitySpace!=null) {
+                spaceService.addMember(dataFactory.getItem(visibleSpaces),user.getUserName());
+            }
         }
 
-        //10% in at least 3 community spaces
-        communitySpace = dataFactory.getItem(visibleSpaces,10,null);
-        if (communitySpace!=null) {
-            spaceService.addMember(dataFactory.getItem(visibleSpaces),user.getUserName());
-        }
 
 
         //create tasks for user
