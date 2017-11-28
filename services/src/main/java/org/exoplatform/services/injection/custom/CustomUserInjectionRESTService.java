@@ -541,9 +541,10 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
                 nbCreatedSpaces++;
                 LOG.info("{}/{} spaces created with {} users in each.", nbCreatedSpaces,nbSpaces,nbUsersBySpaces);
 
+                LOG.info("Commit injected space {}", nbCreatedSpaces);
+                RequestLifeCycle.end();
+                RequestLifeCycle.begin(this.portalContainer);
             }
-
-
         } catch (Exception e) {
             LOG.error("Error when getting user list",e);
         }
