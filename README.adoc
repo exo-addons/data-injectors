@@ -1125,6 +1125,12 @@ WIKI inject and ECMS inject doesn't work..So it must be reviewed .
 
 
 === Injection Custom
+
+
+To create communitySpaces :
+https://localhost:8080/rest/private/userinjection/communitySpaces?nbSpaces=3
+
+
 To inject independant, profile data and collaborators, all can be done with one REST Call :
 http://localhost:8080/rest/userinjection/usersandprofiles?nbIndependants=100&nbCollaborators=2&batchSize=10
 will create 100 independants with 2 collaborators by independants.
@@ -1151,12 +1157,6 @@ An optionnal parameter can be passed :
 usersOffset
 This parameter allows to start the creation of spaces with a user different than the first one :
 http://localhost:8080/rest/userinjection/collaborativesSpaces?nbSpaces=10&nbUsersBySpaces=3&usersOffset=1000
-
-
-
-To create communitySpaces :
-https://localhost:8080/rest/private/userinjection/communitySpaces?nbSpaces=3
-
 
 
 
