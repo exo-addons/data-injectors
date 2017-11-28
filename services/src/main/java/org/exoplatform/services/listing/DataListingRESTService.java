@@ -3,6 +3,7 @@ package org.exoplatform.services.listing;
 import com.atisnetwork.services.independent.IndependentService;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.services.injection.custom.CustomUserInjectionRESTService;
 import org.exoplatform.services.injection.social.PatternInjectorConfig;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -72,7 +73,7 @@ public class DataListingRESTService implements ResourceContainer {
                 }
                 for (Identity identity:identitiessArray) {
                     if (!identity.getRemoteId().equals("root")) {
-                        result+=identity.getRemoteId()+","+patternInjectorConfig.getUserPasswordValue()+"\n";
+                        result+=identity.getRemoteId()+","+ CustomUserInjectionRESTService.DEFAULT_PASSWORD+"\n";
                     }
                 }
                 offset+=limit;
