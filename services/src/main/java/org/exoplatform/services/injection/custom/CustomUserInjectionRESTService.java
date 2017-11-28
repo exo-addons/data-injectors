@@ -141,7 +141,6 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
                 space.setDisplayName(spaceName);
                 space.setRegistration(Space.VALIDATION);
                 space.setDescription(spaceName);
-                space.setGroupId("/spaces/" + spaceName);
                 space.setType(DefaultSpaceApplicationHandler.NAME);
                 space.setVisibility(Space.PRIVATE);
                 String[] managers = new String[] {creator};
@@ -512,9 +511,15 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
                 String messageSubject = getRandomText(8, 20, dataFactory);
                 String message = getRandomText(20, 100, dataFactory);
 
+                Space space = spaceService.getSpaceByDisplayName(spaceName);
+                while (space!=null) {
+                    spaceName = spaceName = getRandomText(8, 20, dataFactory);
+                    space = spaceService.getSpaceByDisplayName(spaceName);
+                }
+
                 //create the space
                 collaboratorService.createSpaceAndInviteCollaborator(spaceName, creator.getUserName(), collaborator.getUserName(), messageSubject, message);
-                Space space = spaceService.getSpaceByDisplayName(spaceName);
+                space = spaceService.getSpaceByDisplayName(spaceName);
 
                 //accept the invitation
                 spaceService.addMember(space, collaborator.getUserName());
