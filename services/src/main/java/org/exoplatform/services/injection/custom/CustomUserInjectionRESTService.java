@@ -144,7 +144,6 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
                 space.setGroupId("/spaces/" + spaceName);
                 space.setType(DefaultSpaceApplicationHandler.NAME);
                 space.setVisibility(Space.PRIVATE);
-                //setAvatarForSpace(space,"http://avatar.3sd.me/200");
                 String[] managers = new String[] {creator};
                 String[] members = new String[] {creator};
                 String[] invitedUsers = new String[] {};
@@ -154,8 +153,9 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
                 space.setManagers(managers);
                 space.setMembers(members);
 
-
+                setAvatarForSpace(space,"http://avatar.3sd.me/100");
                 spaceService.createSpace(space, ConversationState.getCurrent().getIdentity().getUserId());
+                spaceService.updateSpaceAvatar(space);
 
                 nbCreatedSpaces++;
                 LOG.info("{}/{} spaces created.", nbCreatedSpaces,nbSpaces);
@@ -346,7 +346,21 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         }
 
         //add user in a community space
+        //all users are in one community space
         spaceService.addMember(dataFactory.getItem(visibleSpaces),user.getUserName());
+
+        //25% in at least 2 community spaces
+        Space communitySpace = dataFactory.getItem(visibleSpaces,25,null);
+        if (communitySpace!=null) {
+            spaceService.addMember(dataFactory.getItem(visibleSpaces),user.getUserName());
+        }
+
+        //10% in at least 3 community spaces
+        communitySpace = dataFactory.getItem(visibleSpaces,10,null);
+        if (communitySpace!=null) {
+            spaceService.addMember(dataFactory.getItem(visibleSpaces),user.getUserName());
+        }
+
 
         //create tasks for user
         addPersonalTasksByUser(user.getUserName(),dataFactory.getNumberUpTo(3));
@@ -516,6 +530,9 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
 
                     }
                 }
+                setAvatarForSpace(space,"http://avatar.3sd.me/100");
+                spaceService.updateSpace(space);
+                spaceService.updateSpaceAvatar(space);
                 nbCreatedSpaces++;
                 LOG.info("{}/{} spaces created with {} users in each.", nbCreatedSpaces,nbSpaces,nbUsersBySpaces);
 

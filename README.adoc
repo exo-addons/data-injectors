@@ -1154,7 +1154,8 @@ http://localhost:8080/rest/userinjection/collaborativesSpaces?nbSpaces=10&nbUser
 
 
 
-
+To create communitySpaces :
+https://localhost:8080/rest/private/userinjection/communitySpaces?nbSpaces=3
 
 
 
