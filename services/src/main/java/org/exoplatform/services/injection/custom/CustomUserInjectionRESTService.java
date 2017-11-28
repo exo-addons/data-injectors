@@ -513,7 +513,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
 
                 Space space = spaceService.getSpaceByDisplayName(spaceName);
                 while (space!=null) {
-                    spaceName = spaceName = getRandomText(8, 20, dataFactory);
+                    spaceName = getRandomText(8, 20, dataFactory);
                     space = spaceService.getSpaceByDisplayName(spaceName);
                 }
 
