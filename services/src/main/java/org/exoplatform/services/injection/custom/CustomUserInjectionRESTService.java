@@ -23,6 +23,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.rest.resource.ResourceContainer;
+import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.social.core.identity.model.Profile;
 import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
 import org.exoplatform.social.core.image.ImageUtils;
@@ -31,6 +32,7 @@ import org.exoplatform.social.core.manager.IdentityManager;
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.social.core.model.AvatarAttachment;
 import org.exoplatform.social.core.space.SpaceListAccess;
+import org.exoplatform.social.core.space.impl.DefaultSpaceApplicationHandler;
 import org.exoplatform.social.core.space.model.Space;
 import org.exoplatform.social.core.space.spi.SpaceService;
 import org.exoplatform.social.core.storage.api.SpaceStorage;
@@ -72,7 +74,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
     private TaskService taskService;
 
     private static final String DOMAIN = "exoplatform.int";
-    private static final String DEFAULT_PASSWORD = "!%b@Ti5%!";
+    public static final String DEFAULT_PASSWORD = "!%b@Ti5%!";
     private static final String PLATFORM_USERS_GROUP = "/platform/users";
     private static final String ATIS_INDEPENDENTS_GROUP = "/Atis/Independents";
     private static final String PREMIUM_ROLE = "premium";
@@ -114,6 +116,63 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
 
     }
 
+    @GET
+    @Path("/communitySpaces")
+    @RolesAllowed({"administrators"})
+    public Response createCommunitySpaces(@QueryParam("nbSpaces") int nbSpaces) {
+        LOG.info("Start the creation of {} community spaces.", nbSpaces);
+        int nbCreatedSpaces=0;
+        try {
+
+            for (int i=0;i<nbSpaces;i++) {
+
+                String spaceName = "Communauté "+getRandomText(8, 20, dataFactory);
+
+                Space space = spaceService.getSpaceByDisplayName(spaceName);
+                while (space!=null) {
+                    spaceName = "Communauté "+getRandomText(8, 20, dataFactory);
+                    space = spaceService.getSpaceByDisplayName(spaceName);
+                }
+
+                String creator = ConversationState.getCurrent().getIdentity().getUserId();
+
+                space = new Space();
+                space.setPrettyName(spaceName);
+                space.setDisplayName(spaceName);
+                space.setRegistration(Space.VALIDATION);
+                space.setDescription(spaceName);
+                space.setGroupId("/spaces/" + spaceName);
+                space.setType(DefaultSpaceApplicationHandler.NAME);
+                space.setVisibility(Space.PRIVATE);
+                //setAvatarForSpace(space,"http://avatar.3sd.me/200");
+                String[] managers = new String[] {creator};
+                String[] members = new String[] {creator};
+                String[] invitedUsers = new String[] {};
+                String[] pendingUsers = new String[] {};
+                space.setInvitedUsers(invitedUsers);
+                space.setPendingUsers(pendingUsers);
+                space.setManagers(managers);
+                space.setMembers(members);
+
+
+                spaceService.createSpace(space, ConversationState.getCurrent().getIdentity().getUserId());
+
+                nbCreatedSpaces++;
+                LOG.info("{}/{} spaces created.", nbCreatedSpaces,nbSpaces);
+
+            }
+
+
+        } catch (Exception e) {
+            LOG.error("Error when getting user list",e);
+        }
+
+
+        LOG.info("End of data injection");
+        return Response.ok().build();
+
+
+    }
     @GET
     @Path("/usersandprofiles")
     @RolesAllowed({"administrators"})
@@ -194,7 +253,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         Profile currentProfile = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME,collaborator.getUserName()
                 ,true).getProfile();
         currentProfile.setProperty(ATIS_CHARTER_CHECKED,true);
-        setAvatar(currentProfile,"https://api.adorable.io/avatars/200/"+collaborator.getEmail());
+        setAvatarForUser(currentProfile,"https://api.adorable.io/avatars/200/"+collaborator.getEmail());
         identityManager.updateProfile(currentProfile);
 
         //create tasks for user
@@ -202,13 +261,26 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
 
     }
 
-    private void setAvatar(Profile currentProfile, String url) {
+    private void setAvatarForUser(Profile currentProfile, String url) {
 
         try {
             InputStream input = new URL(url).openStream();
             AvatarAttachment avatarAttachment = ImageUtils.createResizedAvatarAttachment(input, 200, 200, null,
                     "avatar.png", "image/png", null);
             currentProfile.setProperty(Profile.AVATAR, avatarAttachment);
+            input.close();
+        } catch (Exception e) {
+            LOG.error("Error when getting avatar image for url {}",url,e);
+        }
+    }
+
+    private void setAvatarForSpace(Space space, String url) {
+
+        try {
+            InputStream input = new URL(url).openStream();
+            AvatarAttachment avatarAttachment = ImageUtils.createResizedAvatarAttachment(input, 200, 200, null,
+                    "avatar.png", "image/png", null);
+            space.setAvatarAttachment(avatarAttachment);
             input.close();
         } catch (Exception e) {
             LOG.error("Error when getting avatar image for url {}",url,e);
@@ -255,10 +327,10 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         currentProfile.setProperty(ATIS_CHARTER_CHECKED,true);
         currentProfile.setProperty(PROVINCES,new ArrayList<>());
         currentProfile.setProperty(ACTIVITIES,new ArrayList<>());
-        setAvatar(currentProfile,"https://api.adorable.io/avatars/200/"+user.getEmail());
+        setAvatarForUser(currentProfile,"https://api.adorable.io/avatars/200/"+user.getEmail());
         identityManager.updateProfile(currentProfile);
 
-        independentService.saveMyIndependentCard(user.getUserName(),companyName,brandName,headOfficeStreetName,headOfficePostalCode,headOfficeCity,null,null,null,establishmentsNumber,null,activityFirstDate,employer,null);
+        independentService.saveMyIndependentCard(user.getUserName(),companyName,brandName,headOfficeStreetName,headOfficePostalCode,headOfficeCity,null,null,null,establishmentsNumber,null,activityFirstDate,employer,null,null);
         String presentation =this.getRandomText(50,300,dataFactory);
         independentService.saveMyIndependentActivity(user.getUserName(),presentation,new ArrayList<>(),new ArrayList<>());
 

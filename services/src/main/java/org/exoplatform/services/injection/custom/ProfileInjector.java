@@ -149,7 +149,7 @@ public class ProfileInjector extends AbstractSocialInjector {
                         identityManager.updateProfile(currentProfile);
 
 
-                        independentService.saveMyIndependentCard(user.getUserName(),companyName,brandName,headOfficeStreetName,headOfficePostalCode,headOfficeCity,null,null,null,establishmentsNumber,null,activityFirstDate,employer,null);
+                        independentService.saveMyIndependentCard(user.getUserName(),companyName,brandName,headOfficeStreetName,headOfficePostalCode,headOfficeCity,null,null,null,establishmentsNumber,null,activityFirstDate,employer,null,null);
 
                         int nbCollaboratorsToCreate=2;
                         addCollaborators(nbCollaboratorsToCreate,user.getUserName());
