@@ -144,7 +144,7 @@ public class DataListingRESTService implements ResourceContainer {
         LOG.info("Get searchTerms take {} ms.", (endTime-startTime));
 
 
-        return Response.ok(result, MediaType.TEXT_PLAIN).build();
+        return Response.ok(result).type(MediaType.TEXT_PLAIN+ "; charset=UTF-8").build();
 
 
     }
