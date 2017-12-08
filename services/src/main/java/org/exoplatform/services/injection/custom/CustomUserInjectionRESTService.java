@@ -622,10 +622,12 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
                 }
                 users = allUsersListAccess.load(current, pageSize);
                 for (User user : users) {
-                    RequestLifeCycle.end();
-                    RequestLifeCycle.begin(PortalContainer.getInstance());
-                    user.setPassword(newPassword);
-                    organizationService.getUserHandler().saveUser(user,true);
+                    if (!user.getUserName().equals("root")) {
+                        RequestLifeCycle.end();
+                        RequestLifeCycle.begin(PortalContainer.getInstance());
+                        user.setPassword(newPassword);
+                        organizationService.getUserHandler().saveUser(user, true);
+                    }
                 }
                 current += users.length;
             } while (users != null && users.length > 0);

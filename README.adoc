@@ -1191,7 +1191,9 @@ To reset all users password to a new value, call this web service
 
     /rest/userinjection/resetpassword?newPassword={yourNewPassword}
 
-This will iterate on all users and change their password.
+* newPassword : the new password to affect to all users.
+
+This will iterate on all users and change their password. Root account will not be affected by this modification
 
 
 
