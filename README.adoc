@@ -1164,11 +1164,23 @@ The nth+2 is invited in the new space
 If we use all users, we go back to the first one, and loop, until create nbSpaces spaces.
 ----
 
+== Data listing
 
+=== user list
 
+You can get the list of all users in the dataset :
 
+http://localhost:8080/rest/datalisting/identities
 
+Format of each line of the csv list : username , password
 
+=== searchable terms list
+
+You can get the list of all searchable terms in the dataset :
+
+http://localhost:8080/rest/datalisting/searchTerms
+
+Format of each line of the csv list : search term
 
 
 
