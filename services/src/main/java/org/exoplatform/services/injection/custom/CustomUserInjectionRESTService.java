@@ -74,7 +74,6 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
     private TaskService taskService;
 
     private static final String DOMAIN = "exoplatform.int";
-    public static final String DEFAULT_PASSWORD = "!%b@Ti5%!";
     private static final String PLATFORM_USERS_GROUP = "/platform/users";
     private static final String ATIS_INDEPENDENTS_GROUP = "/Atis/Independents";
     private static final String PREMIUM_ROLE = "premium";
@@ -175,7 +174,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
     @GET
     @Path("/usersandprofiles")
     @RolesAllowed({"administrators"})
-    public Response createUsersAndProfiles(@QueryParam("nbIndependants") int nbIndependants, @QueryParam("nbCollaborators") int nbCollaborators,@QueryParam("batchSize") int batchSize) {
+    public Response createUsersAndProfiles(@QueryParam("nbIndependants") int nbIndependants, @QueryParam("nbCollaborators") int nbCollaborators,@QueryParam("password") String password, @QueryParam("batchSize") int batchSize) {
         LOG.info("Start the creation of {} independants and {} collaborators by independants.",nbIndependants,nbCollaborators);
 
         int customBatchSize = this.batchSize;
@@ -202,7 +201,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         for (int i=0; i<nbIndependants;i++) {
             try {
                 //createUser
-                User user = createUser();
+                User user = createUser(password);
                 nbCreatedUsers++;
                 //fill profile
                 Space[] visibleSpaces = getNotHiddenSpaces(user.getUserName());
@@ -210,7 +209,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
                 testAndCommitBatch(nbCreatedUsers, customBatchSize);
                 //addCollaborators
                 for (int j=0;j<nbCollaborators;j++) {
-                    addCollaborators(user);
+                    addCollaborators(user,password);
                     nbCreatedUsers++;
                     testAndCommitBatch(nbCreatedUsers, customBatchSize);
                 }
@@ -232,7 +231,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
       }
     }
 
-    private void addCollaborators(User independant) throws Exception {
+    private void addCollaborators(User independant, String password) throws Exception {
         RandomUser randomUser=getNewRandomUser();
         String username = randomUser.getUsername();
         String firstName = randomUser.getFirstName();
@@ -240,7 +239,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         String email = username+"@"+DOMAIN;
         collaboratorService.inviteCollaborator(firstName, lastName, email, independant.getUserName());
         User collaborator = organizationService.getUserHandler().findUserByName(username);
-        collaborator.setPassword(DEFAULT_PASSWORD);
+        collaborator.setPassword(password);
         organizationService.getUserHandler().saveUser(collaborator,true);
 
         //save user locale
@@ -366,7 +365,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
 
     }
 
-    private User createUser() throws Exception{
+    private User createUser(String password) throws Exception{
 
         RandomUser randomUser = getNewRandomUser();
         String username = randomUser.getUsername();
@@ -376,7 +375,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         user.setEmail(username + "@" + DOMAIN);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setPassword(DEFAULT_PASSWORD);
+        user.setPassword(password);
         organizationService.getUserHandler().createUser(user, true);
         identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, username, false);
         return user;

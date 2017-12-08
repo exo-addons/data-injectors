@@ -1137,10 +1137,11 @@ https://localhost:8080/rest/private/userinjection/communitySpaces?nbSpaces=3
 
 To inject 100 independants with their profile data and 2 collaborators each :
 
-http://localhost:8080/rest/userinjection/usersandprofiles?nbIndependants=100&nbCollaborators=2
+    http://localhost:8080/rest/userinjection/usersandprofiles?nbIndependants=100&nbCollaborators=2&password=yourpassword
 
 * nbIndependants : the number of Independant to create
 * nbCollaborators : the number if Collaborator to create for each created Independant
+* password : the password for created users
 
 === Collaborative Spaces injection
 
