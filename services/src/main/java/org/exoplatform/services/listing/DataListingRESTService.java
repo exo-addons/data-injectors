@@ -20,6 +20,7 @@ import org.exoplatform.social.core.profile.ProfileFilter;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class DataListingRESTService implements ResourceContainer {
     @GET
     @Path("/identities")
     @RolesAllowed({"administrators"})
-    public Response identities() {
+    public Response identities(@QueryParam("password") String password) {
         long startTime = System.currentTimeMillis();
 
         String result = "";
@@ -73,7 +74,7 @@ public class DataListingRESTService implements ResourceContainer {
                 }
                 for (Identity identity:identitiessArray) {
                     if (!identity.getRemoteId().equals("root")) {
-                        result+=identity.getRemoteId()+","+ CustomUserInjectionRESTService.DEFAULT_PASSWORD+"\n";
+                        result+=identity.getRemoteId()+","+password+"\n";
                     }
                 }
                 offset+=limit;

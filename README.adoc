@@ -66,14 +66,16 @@ will create 100 users with a random firstname and lastname. The user name is fir
 Each time we call this request, 100 new users are created.
 
 Then, to the user list, we add a this web service
-http://localhost:8080/rest/datalisting/identities
+
+    http://localhost:8080/rest/datalisting/identities?password=yourpassword
+
 The result is
 
-    acharles,exo
-    adunn,exo
-    ahiggins,exo
-    amalone,exo
-    amay,exo
+    acharles,yourpassword
+    adunn,yourpassword
+    ahiggins,yourpassword
+    amalone,yourpassword
+    amay,yourpassword
 
 and can be copy/paste in a CSV file for bench purpose.
 
