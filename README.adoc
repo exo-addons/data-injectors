@@ -1170,17 +1170,29 @@ If we use all users, we go back to the first one, and loop, until create nbSpace
 
 You can get the list of all users in the dataset :
 
-http://localhost:8080/rest/datalisting/identities
+    http://localhost:8080/rest/datalisting/identities?password=yourpassword
 
-Format of each line of the csv list : username , password
+* password : the password to display on each line
+
+Format of each line of the csv list : username , yourpassword
 
 === searchable terms list
 
 You can get the list of all searchable terms in the dataset :
 
-http://localhost:8080/rest/datalisting/searchTerms
+    http://localhost:8080/rest/datalisting/searchTerms
 
 Format of each line of the csv list : search term
+
+
+==== Users password reset
+
+To reset all users password to a new value, call this web service
+
+    /rest/userinjection/resetpassword?newPassword={yourNewPassword}
+
+This will iterate on all users and change their password.
+
 
 
 

@@ -600,4 +600,44 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
 
     }
 
+    @GET
+    @Path("/resetpassword")
+    @RolesAllowed({"administrators"})
+    public Response resetPassword(@QueryParam("newPassword") String newPassword) {
+        int pageSize = 20;
+        int current = 0;
+        int totalUsers=0;
+        RequestLifeCycle.begin(PortalContainer.getInstance());
+
+        try {
+            ListAccess<User> allUsersListAccess = organizationService.getUserHandler().findAllUsers();
+            totalUsers = allUsersListAccess.getSize();
+            LOG.info("Number of users = " + totalUsers);
+            User[] users;
+            long startTime = System.currentTimeMillis();
+            do {
+                LOG.info("    Progression of users password reset : " + current + "/" + totalUsers);
+                if (current + pageSize > totalUsers) {
+                    pageSize = totalUsers - current;
+                }
+                users = allUsersListAccess.load(current, pageSize);
+                for (User user : users) {
+                    RequestLifeCycle.end();
+                    RequestLifeCycle.begin(PortalContainer.getInstance());
+                    user.setPassword(newPassword);
+                    organizationService.getUserHandler().saveUser(user,true);
+                }
+                current += users.length;
+            } while (users != null && users.length > 0);
+            long endTime = System.currentTimeMillis();
+            LOG.info("=== Execution of reset Password in " + (endTime - startTime) + " ms");
+        } catch (Exception e) {
+            LOG.error("Error while executing resetPassword - Cause : " + e.getMessage(), e);
+        } finally {
+            RequestLifeCycle.end();
+        }
+        return Response.ok(totalUsers+" users password reset").build();
+    }
+
+
 }
