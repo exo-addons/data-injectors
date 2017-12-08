@@ -80,7 +80,9 @@ The result is
 and can be copy/paste in a CSV file for bench purpose.
 
 To list searchTerms for independent :
-http://localhost:8080/rest/datalisting/searchTerms
+
+    http://localhost:8080/rest/datalisting/searchTerms
+
 The result is
 
     Root
@@ -1148,7 +1150,8 @@ To inject 100 independants with their profile data and 2 collaborators each :
 === Collaborative Spaces injection
 
 To create 10 collaborative spaces between independents and collaborators :
-http://localhost:8080/rest/userinjection/collaborativesSpaces?nbSpaces=10&nbUsersBySpaces=3
+
+    http://localhost:8080/rest/userinjection/collaborativesSpaces?nbSpaces=10&nbUsersBySpaces=3
 
 * nbSpaces : the number of Spaces to creates (access : hidden + closed)
 * nbUsersBySpaces : the number of users to add in each created space
