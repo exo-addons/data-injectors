@@ -625,7 +625,7 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
                         RequestLifeCycle.end();
                         RequestLifeCycle.begin(PortalContainer.getInstance());
                         user.setPassword(newPassword);
-                        organizationService.getUserHandler().saveUser(user, true);
+                        organizationService.getUserHandler().saveUser(user, false);
                     }
                 }
                 current += users.length;
