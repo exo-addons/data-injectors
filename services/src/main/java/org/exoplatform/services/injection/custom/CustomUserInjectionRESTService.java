@@ -24,6 +24,7 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.rest.resource.ResourceContainer;
 import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.social.core.identity.model.Identity;
 import org.exoplatform.social.core.identity.model.Profile;
 import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
 import org.exoplatform.social.core.image.ImageUtils;
@@ -31,6 +32,7 @@ import org.exoplatform.social.core.manager.IdentityManager;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.social.core.model.AvatarAttachment;
+import org.exoplatform.social.core.profile.ProfileFilter;
 import org.exoplatform.social.core.space.SpaceListAccess;
 import org.exoplatform.social.core.space.impl.DefaultSpaceApplicationHandler;
 import org.exoplatform.social.core.space.model.Space;
@@ -44,6 +46,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 
@@ -310,7 +313,8 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
         String establishmentsNumber="1";
 
         String employer=dataFactory.getItem(employerValues);
-        String tvaNum = dataFactory.getNumberText(10);
+        String tvaNum = dataFactory.getNumberText(9);
+        tvaNum="0"+tvaNum;
         Calendar endSubsDate = Calendar.getInstance();
         endSubsDate.add(Calendar.YEAR,2);
         String endOfSubscriptionDate=endSubsDate.get(Calendar.DAY_OF_MONTH)+"-"+(endSubsDate.get(Calendar.MONTH)+1)+"-"+endSubsDate.get(Calendar.YEAR);
@@ -638,6 +642,53 @@ public class CustomUserInjectionRESTService implements ResourceContainer {
             RequestLifeCycle.end();
         }
         return Response.ok(totalUsers+" users password reset").build();
+    }
+
+    @GET
+    @Path("/modifyTvaNum")
+    @RolesAllowed({"administrators"})
+    public Response modifyTvaNum(@QueryParam("newPassword") String newPassword) {
+        long startTime = System.currentTimeMillis();
+
+        String result = "";
+        int limit =1000;
+        int offset=0;
+        try {
+            ListAccess<Identity> identities = identityManager.getIdentitiesByProfileFilter(OrganizationIdentityProvider.NAME,new ProfileFilter(), false);
+            int total = identities.getSize();
+            while (offset<total) {
+
+                Identity[] identitiessArray;
+                if (total-offset<limit) {
+                    //there is less than limit element to read. load to the end
+                    identitiessArray=identities.load(offset, total-offset);
+                } else {
+                    identitiessArray=identities.load(offset,limit);
+                }
+                for (Identity identity:identitiessArray) {
+                    Profile profile=identity.getProfile();
+                    if (profile.getProperty(IndependentService.TVA_NUM)!=null && !profile.getProperty(IndependentService.TVA_NUM).equals("")) {
+                     String tvaNum = profile.getProperty(IndependentService.TVA_NUM).toString();
+                     if (tvaNum.charAt(0)!='0') {
+                         String oldtvaNum=tvaNum;
+                         tvaNum="0"+tvaNum.substring(1);
+                         profile.setProperty(IndependentService.TVA_NUM,tvaNum);
+                         identityManager.updateProfile(profile);
+                         LOG.info("Update tvaNum for user {}, oldNum = {}, new num ={}",identity.getRemoteId(),oldtvaNum,tvaNum);
+                     }
+                    }
+                }
+                offset+=limit;
+            }
+        } catch (Exception e) {
+            LOG.error("Error when getting user list",e);
+        }
+        long endTime = System.currentTimeMillis();
+        LOG.info("Get all user with identities take {} ms.", (endTime-startTime));
+
+
+        return Response.ok(result, MediaType.TEXT_PLAIN).build();
+
     }
 
 
