@@ -117,10 +117,14 @@ public class DataListingRESTService implements ResourceContainer {
                 }
                 for (Identity identity:identitiessArray) {
                     if (identity.getProfile().getProperty(Profile.FIRST_NAME) != null) {
-                        results.add(identity.getProfile().getProperty(Profile.FIRST_NAME).toString());
+                        String firstname =identity.getProfile().getProperty(Profile.FIRST_NAME).toString();
+                        firstname=firstname.trim();
+                        results.add(firstname);
                     }
                     if (identity.getProfile().getProperty(Profile.LAST_NAME) != null) {
-                        results.add(identity.getProfile().getProperty(Profile.LAST_NAME).toString());
+                        String lastname =identity.getProfile().getProperty(Profile.FIRST_NAME).toString();
+                        lastname=lastname.trim();
+                        results.add(lastname);
                     }
                     if (identity.getProfile().getProperty(IndependentService.COMPANY_NAME) != null) {
                         String companyName = identity.getProfile().getProperty(IndependentService.COMPANY_NAME).toString();
