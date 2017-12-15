@@ -124,6 +124,7 @@ public class DataListingRESTService implements ResourceContainer {
                     }
                     if (identity.getProfile().getProperty(IndependentService.COMPANY_NAME) != null) {
                         String companyName = identity.getProfile().getProperty(IndependentService.COMPANY_NAME).toString();
+                        companyName=companyName.replace("'"," ");
                         results.addAll(Arrays.asList(companyName.split(" ")));
                     }
                 }
