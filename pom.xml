@@ -17,6 +17,7 @@
   </modules>
   <properties>
     <org.exoplatform.platform.version>5.0.0</org.exoplatform.platform.version>
+    <org.exoplatform.cp-atisnetwork.version>2.0.x-SNAPSHOT</org.exoplatform.cp-atisnetwork.version>
 
     <datafactory.version>0.8</datafactory.version>
   </properties>
