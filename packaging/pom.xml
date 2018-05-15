@@ -4,7 +4,7 @@
   <parent>
     <artifactId>data-injectors-configuration</artifactId>
     <groupId>org.exoplatform.addons.injectors-custom</groupId>
-    <version>1.0.x-SNAPSHOT</version>
+    <version>2.0.x-atis-SNAPSHOT</version>
   </parent>
   <artifactId>data-injectors-packaging</artifactId>
   <packaging>pom</packaging>
