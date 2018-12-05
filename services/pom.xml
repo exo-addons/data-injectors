@@ -10,8 +10,8 @@
   <packaging>jar</packaging>
   <name>Data Injectors - Services</name>
   <properties>
-    <task.addon.version>2.2.x-SNAPSHOT</task.addon.version>
-    <answers.addon.version>2.2.x-SNAPSHOT</answers.addon.version>
+    <task.addon.version>2.0.x-SNAPSHOT</task.addon.version>
+    <answers.addon.version>2.0.x-SNAPSHOT</answers.addon.version>
     <itext.version>2.1.7</itext.version>
   </properties>
   <dependencies>

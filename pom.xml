@@ -16,7 +16,7 @@
     <module>packaging</module>
   </modules>
   <properties>
-    <org.exoplatform.platform.version>5.2.x-SNAPSHOT</org.exoplatform.platform.version>
+    <org.exoplatform.platform.version>5.0.x-SNAPSHOT</org.exoplatform.platform.version>
   </properties>
   <dependencyManagement>
     <dependencies>
