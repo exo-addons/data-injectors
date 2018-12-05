@@ -4,7 +4,7 @@
   <parent>
     <artifactId>data-injectors-configuration</artifactId>
     <groupId>org.exoplatform.addons.injectors</groupId>
-    <version>1.0.x-SNAPSHOT</version>
+    <version>1.0.0</version>
   </parent>
   <artifactId>data-injectors-services</artifactId>
   <packaging>jar</packaging>
